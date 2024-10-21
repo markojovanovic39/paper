@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<!-- saved from url=(0111)https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd -->
+<html dir="ltr" lang="en" prefix="og: https://ogp.me/ns#"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="fb:pages" content="509794245855420">
+<meta name="yandex-verification" content="6fdf7045d6d117c9">
+<link rel="profile" href="https://gmpg.org/xfn/11">
+<meta name="ahrefs-site-verification" content="8774196f2ff4f1da4e6258d4bb6114ca1fce022e5a4a17f98cc84b0d85efd7d4">
+<script async="" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/tag.js.download"></script><script async="" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/gtm.js.download"></script><script>
+setTimeout(function(){
+(function (w, d, s, l, i) {
+w[l] = w[l] || [];
+w[l].push({
+'gtm.start':
+new Date().getTime(), event: 'gtm.js'
+});
+var f = d.getElementsByTagName(s)[0],
+j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+j.async = true;
+j.src =
+'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+f.parentNode.insertBefore(j, f);
+})(window, document, 'script', 'dataLayer', 'GTM-TR2PZ3F');
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+ym(38368675, "init", {
+clickmap:true,
+trackLinks:true,
+accurateTrackBounce:true
+});
+}, 5000); 
+</script>
+<!-- Google Tag Manager
+<script>(function (w, d, s, l, i) {
+w[l] = w[l] || [];
+w[l].push({
+'gtm.start':
+new Date().getTime(), event: 'gtm.js'
+});
+var f = d.getElementsByTagName(s)[0],
+j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+j.async = true;
+j.src =
+'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+f.parentNode.insertBefore(j, f);
+})(window, document, 'script', 'dataLayer', 'GTM-TR2PZ3F');</script>
+<!-- End Google Tag Manager -->
+<title>🥇Linux time synchronization: NTP, Chrony and systemd-timesyncd | ProHoster</title>
+<!-- All in One SEO 4.7.2 - aioseo.com -->
+<meta name="description" content="Most people keep track of time. We get up on time to complete our morning rituals and go to work, take a lunch break, meet project deadlines, celebrate birthdays and holidays, board a plane, and so on. Moreover: some of us are obsessed with time. My watch is powered by solar energy and gets the correct time from the National">
+<meta name="robots" content="max-image-preview:large">
+<link rel="canonical" href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<meta name="generator" content="All in One SEO (AIOSEO) 4.7.2">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="ProHoster | Купить надежный хостинг для сайтов с защитой от DDoS, VPS VDS серверы">
+<meta property="og:type" content="article">
+<meta property="og:title" content="🥇Linux time synchronization: NTP, Chrony and systemd-timesyncd | ProHoster">
+<meta property="og:description" content="Most people keep track of time. We get up on time to complete our morning rituals and go to work, take a lunch break, meet project deadlines, celebrate birthdays and holidays, board a plane, and so on. Moreover: some of us are obsessed with time. My watch is powered by solar energy and gets the correct time from the National">
+<meta property="og:url" content="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<meta property="og:image" content="https://prohoster.info/wp-content/uploads/2021/11/logo-350.jpg">
+<meta property="og:image:secure_url" content="https://prohoster.info/wp-content/uploads/2021/11/logo-350.jpg">
+<meta property="og:image:width" content="350">
+<meta property="og:image:height" content="350">
+<meta property="article:published_time" content="2020-06-06T05:42:18+00:00">
+<meta property="article:modified_time" content="2020-06-06T05:42:18+00:00">
+<meta name="google" content="nositelinkssearchbox">
+<script type="application/ld+json" class="aioseo-schema">{"@context":"https:\/\/schema.org","@graph":[{"@type":"Article","@id":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#article","name":"🥇Синхронизация времени в Linux: NTP, Chrony и systemd-timesyncd | ProHoster","headline":"Linux Time Synchronization: NTP, Chrony and systemd-timesyncd","author":{"@id":"https:\/\/prohoster.info\/author\/gagarinura#author"},"publisher":{"@id":"https:\/\/prohoster.info\/#organization"},"image":{"@type":"ImageObject","url":"https:\/\/prohoster.info\/wp-content\/uploads\/2020\/06\/18337aa0cbb3463547a347843bb29dbf.jpg","width":600,"height":337},"datePublished":"2020-06-06T07:42:18+02:00","dateModified":"2020-06-06T07:42:18+02:00","inLanguage":"en","mainEntityOfPage":{"@id":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#webpage"},"isPartOf":{"@id":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#webpage"},"articleSection":"Администрирование, Русский"},{"@type":"BreadcrumbList","@id":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"https:\/\/prohoster.info\/#listItem","position":1,"name":"Home page","item":"https:\/\/prohoster.info\/","nextItem":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#listItem"},{"@type":"ListItem","@id":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#listItem","position":2,"name":"Linux Time Synchronization: NTP, Chrony and systemd-timesyncd","previousItem":"https:\/\/prohoster.info\/#listItem"}]},{"@type":"Organization","@id":"https:\/\/prohoster.info\/#organization","name":"ProHoster.info","description":"Купить надежный хостинг для сайтов с защитой от DDoS, VPS VDS серверы","url":"https:\/\/prohoster.info\/","logo":{"@type":"ImageObject","url":"https:\/\/prohoster.info\/wp-content\/uploads\/2021\/04\/logo-140x140-1.jpg","@id":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd\/#organizationLogo","width":140,"height":140},"image":{"@id":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd\/#organizationLogo"}},{"@type":"Person","@id":"https:\/\/prohoster.info\/author\/gagarinura#author","url":"https:\/\/prohoster.info/en\/author\/gagarinura","name":"ProHoster","image":{"@type":"ImageObject","@id":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#authorImage","url":"https:\/\/secure.gravatar.com\/avatar\/b713eca75eff04c98ec6a46f221a6fb9?s=96&d=mm&r=g","width":96,"height":96,"caption":"ProHoster"}},{"@type":"WebPage","@id":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#webpage","url":"https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","name":"🥇Linux time synchronization: NTP, Chrony and systemd-timesyncd | ProHoster","description":"Most people keep track of time. We get up on time to complete our morning rituals and go to work, take a lunch break, meet project deadlines, celebrate birthdays and holidays, board a plane, and so on. Moreover: some of us are obsessed with time. My watch is powered by solar energy and gets the correct time from the National","inLanguage":"en","isPartOf":{"@id":"https:\/\/prohoster.info\/#website"},"breadcrumb":{"@id":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#breadcrumblist"},"author":{"@id":"https:\/\/prohoster.info\/author\/gagarinura#author"},"creator":{"@id":"https:\/\/prohoster.info\/author\/gagarinura#author"},"image":{"@type":"ImageObject","url":"https:\/\/prohoster.info\/wp-content\/uploads\/2020\/06\/18337aa0cbb3463547a347843bb29dbf.jpg","@id":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd\/#mainImage","width":600,"height":337},"primaryImageOfPage":{"@id":"https:\/\/prohoster.info\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#mainImage"},"datePublished":"2020-06-06T07:42:18+02:00","dateModified":"2020-06-06T07:42:18+02:00"},{"@type":"WebSite","@id":"https:\/\/prohoster.info\/#website","url":"https:\/\/prohoster.info/en\/","name":"ProHoster","description":"Buy reliable hosting for sites with DDoS protection, VPS VDS servers","inLanguage":"en","publisher":{"@id":"https:\/\/prohoster.info\/#organization"}}]}</script>
+<!-- All in One SEO -->
+<link rel="alternate" hreflang="ru" href="https://prohoster.info/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="af" href="https://prohoster.info/af/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="sq" href="https://prohoster.info/sq/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="am" href="https://prohoster.info/am/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ar" href="https://prohoster.info/ar/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="hy" href="https://prohoster.info/hy/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="az" href="https://prohoster.info/az/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="eu" href="https://prohoster.info/eu/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="be" href="https://prohoster.info/be/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="bn" href="https://prohoster.info/bn/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="bs" href="https://prohoster.info/bs/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="bg" href="https://prohoster.info/bg/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ca" href="https://prohoster.info/ca/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ceb" href="https://prohoster.info/ceb/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ny" href="https://prohoster.info/ny/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="zh-CN" href="https://prohoster.info/zh-CN/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="zh-TW" href="https://prohoster.info/zh-TW/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="co" href="https://prohoster.info/co/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="hr" href="https://prohoster.info/hr/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="cs" href="https://prohoster.info/cs/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="da" href="https://prohoster.info/da/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="nl" href="https://prohoster.info/nl/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="en" href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="eo" href="https://prohoster.info/eo/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="et" href="https://prohoster.info/et/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="tl" href="https://prohoster.info/tl/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="fi" href="https://prohoster.info/fi/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="fr" href="https://prohoster.info/fr/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="fy" href="https://prohoster.info/fy/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="gl" href="https://prohoster.info/gl/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ka" href="https://prohoster.info/ka/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="de" href="https://prohoster.info/de/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="el" href="https://prohoster.info/el/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="gu" href="https://prohoster.info/gu/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ht" href="https://prohoster.info/ht/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ha" href="https://prohoster.info/ha/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="haw" href="https://prohoster.info/haw/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="he" href="https://prohoster.info/iw/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="hi" href="https://prohoster.info/hi/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="hmn" href="https://prohoster.info/hmn/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="hu" href="https://prohoster.info/hu/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="is" href="https://prohoster.info/is/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ig" href="https://prohoster.info/ig/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="id" href="https://prohoster.info/id/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ga" href="https://prohoster.info/ga/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="it" href="https://prohoster.info/it/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ja" href="https://prohoster.info/ja/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="jv" href="https://prohoster.info/jw/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="kn" href="https://prohoster.info/kn/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="kk" href="https://prohoster.info/kk/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="km" href="https://prohoster.info/km/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ko" href="https://prohoster.info/ko/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ku" href="https://prohoster.info/ku/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ky" href="https://prohoster.info/ky/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="lo" href="https://prohoster.info/lo/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="la" href="https://prohoster.info/la/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="lv" href="https://prohoster.info/lv/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="lt" href="https://prohoster.info/lt/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="lb" href="https://prohoster.info/lb/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="mk" href="https://prohoster.info/mk/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="mg" href="https://prohoster.info/mg/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ms" href="https://prohoster.info/ms/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ml" href="https://prohoster.info/ml/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="mt" href="https://prohoster.info/mt/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="mi" href="https://prohoster.info/mi/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="mr" href="https://prohoster.info/mr/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="mn" href="https://prohoster.info/mn/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="my" href="https://prohoster.info/my/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ne" href="https://prohoster.info/ne/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="no" href="https://prohoster.info/no/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ps" href="https://prohoster.info/ps/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="fa" href="https://prohoster.info/fa/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="pl" href="https://prohoster.info/pl/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="pt" href="https://prohoster.info/pt/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="pa" href="https://prohoster.info/pa/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ro" href="https://prohoster.info/ro/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="sm" href="https://prohoster.info/sm/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="gd" href="https://prohoster.info/gd/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="sr" href="https://prohoster.info/sr/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="st" href="https://prohoster.info/st/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="sn" href="https://prohoster.info/sn/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="sd" href="https://prohoster.info/sd/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="si" href="https://prohoster.info/si/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="sk" href="https://prohoster.info/sk/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="sl" href="https://prohoster.info/sl/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="so" href="https://prohoster.info/so/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="es" href="https://prohoster.info/es/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="su" href="https://prohoster.info/su/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="sw" href="https://prohoster.info/sw/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="sv" href="https://prohoster.info/sv/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="tg" href="https://prohoster.info/tg/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ta" href="https://prohoster.info/ta/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="te" href="https://prohoster.info/te/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="th" href="https://prohoster.info/th/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="tr" href="https://prohoster.info/tr/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="uk" href="https://prohoster.info/uk/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="ur" href="https://prohoster.info/ur/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="uz" href="https://prohoster.info/uz/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="vi" href="https://prohoster.info/vi/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="cy" href="https://prohoster.info/cy/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="xh" href="https://prohoster.info/xh/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="yi" href="https://prohoster.info/yi/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="yo" href="https://prohoster.info/yo/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="alternate" hreflang="zu" href="https://prohoster.info/zu/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+<link rel="alternate" type="application/rss+xml" title="ProHoster » Лента" href="https://prohoster.info/feed">
+<link rel="alternate" type="application/rss+xml" title="ProHoster » Лента комментариев" href="https://prohoster.info/comments/feed">
+<link rel="alternate" type="application/rss+xml" title="ProHoster » Лента комментариев к «Синхронизация времени в Linux: NTP, Chrony и systemd-timesyncd»" href="https://prohoster.info/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd/feed">
+<link rel="stylesheet" id="menu-icons-extra-css" href="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/extra.min.css" type="text/css" media="all">
+<style id="wp-emoji-styles-inline-css" type="text/css">
+img.wp-smiley, img.emoji {
+display: inline !important;
+border: none !important;
+box-shadow: none !important;
+height: 1em !important;
+width: 1em !important;
+margin: 0 0.07em !important;
+vertical-align: -0.1em !important;
+background: none !important;
+padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="wp-block-library-css" href="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/style.min.css" type="text/css" media="all">
+<style id="classic-theme-styles-inline-css" type="text/css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<style id="global-styles-inline-css" type="text/css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel="stylesheet" id="anycomment-styles-css" href="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/main.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="opensans-css" href="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/opensans.css" type="text/css" media="all">
+<link rel="stylesheet" id="universal55x5-icons-css" href="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/icons.css" type="text/css" media="all">
+<link rel="stylesheet" id="universal55x5-grid-css" href="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/flexboxgrid.css" type="text/css" media="all">
+<link rel="stylesheet" id="universal55x5-style-css" href="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/style.css" type="text/css" media="all">
+<link rel="stylesheet" id="universal55x5-custom-css" href="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/custom.css" type="text/css" media="all">
+<link rel="stylesheet" id="tablepress-default-css" href="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/default.css" type="text/css" media="all">
+<link rel="https://api.w.org/" href="https://prohoster.info/wp-json/"><link rel="alternate" title="JSON" type="application/json" href="https://prohoster.info/wp-json/wp/v2/posts/84228"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://prohoster.info/xmlrpc.php?rsd">
+<meta name="generator" content="WordPress 6.6.2">
+<link rel="shortlink" href="https://prohoster.info/en/?p=84228">
+<link rel="pingback" href="https://prohoster.info/xmlrpc.php">		<style type="text/css">
+.site-title,
+.site-description {
+position: absolute;
+clip: rect(1px, 1px, 1px, 1px);
+}
+</style>
+<!-- Yandex.Metrika counter 
+<script type="text/javascript" >
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+ym(38368675, "init", {
+clickmap:true,
+trackLinks:true,
+accurateTrackBounce:true
+});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/38368675" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<script data-wpfc-render="false">var Wpfcll={s:[],osl:0,scroll:false,i:function(){Wpfcll.ss();window.addEventListener('load',function(){let observer=new MutationObserver(mutationRecords=>{Wpfcll.osl=Wpfcll.s.length;Wpfcll.ss();if(Wpfcll.s.length > Wpfcll.osl){Wpfcll.ls(false);}});observer.observe(document.getElementsByTagName("html")[0],{childList:true,attributes:true,subtree:true,attributeFilter:["src"],attributeOldValue:false,characterDataOldValue:false});Wpfcll.ls(true);});window.addEventListener('scroll',function(){Wpfcll.scroll=true;Wpfcll.ls(false);});window.addEventListener('resize',function(){Wpfcll.scroll=true;Wpfcll.ls(false);});window.addEventListener('click',function(){Wpfcll.scroll=true;Wpfcll.ls(false);});},c:function(e,pageload){var w=document.documentElement.clientHeight || body.clientHeight;var n=0;if(pageload){n=0;}else{n=(w > 800) ? 800:200;n=Wpfcll.scroll ? 800:n;}var er=e.getBoundingClientRect();var t=0;var p=e.parentNode ? e.parentNode:false;if(typeof p.getBoundingClientRect=="undefined"){var pr=false;}else{var pr=p.getBoundingClientRect();}if(er.x==0 && er.y==0){for(var i=0;i < 10;i++){if(p){if(pr.x==0 && pr.y==0){if(p.parentNode){p=p.parentNode;}if(typeof p.getBoundingClientRect=="undefined"){pr=false;}else{pr=p.getBoundingClientRect();}}else{t=pr.top;break;}}};}else{t=er.top;}if(w - t+n > 0){return true;}return false;},r:function(e,pageload){var s=this;var oc,ot;try{oc=e.getAttribute("data-wpfc-original-src");ot=e.getAttribute("data-wpfc-original-srcset");originalsizes=e.getAttribute("data-wpfc-original-sizes");if(s.c(e,pageload)){if(oc || ot){if(e.tagName=="DIV" || e.tagName=="A" || e.tagName=="SPAN"){e.style.backgroundImage="url("+oc+")";e.removeAttribute("data-wpfc-original-src");e.removeAttribute("data-wpfc-original-srcset");e.removeAttribute("onload");}else{if(oc){e.setAttribute('src',oc);}if(ot){e.setAttribute('srcset',ot);}if(originalsizes){e.setAttribute('sizes',originalsizes);}if(e.getAttribute("alt") && e.getAttribute("alt")=="blank"){e.removeAttribute("alt");}e.removeAttribute("data-wpfc-original-src");e.removeAttribute("data-wpfc-original-srcset");e.removeAttribute("data-wpfc-original-sizes");e.removeAttribute("onload");if(e.tagName=="IFRAME"){var y="https://www.youtube.com/embed/";if(navigator.userAgent.match(/\sEdge?\/\d/i)){e.setAttribute('src',e.getAttribute("src").replace(/.+\/templates\/youtube\.html\#/,y));}e.onload=function(){if(typeof window.jQuery !="undefined"){if(jQuery.fn.fitVids){jQuery(e).parent().fitVids({customSelector:"iframe[src]"});}}var s=e.getAttribute("src").match(/templates\/youtube\.html\#(.+)/);if(s){try{var i=e.contentDocument || e.contentWindow;if(i.location.href=="about:blank"){e.setAttribute('src',y+s[1]);}}catch(err){e.setAttribute('src',y+s[1]);}}}}}}else{if(e.tagName=="NOSCRIPT"){if(jQuery(e).attr("data-type")=="wpfc"){e.removeAttribute("data-type");jQuery(e).after(jQuery(e).text());}}}}}catch(error){console.log(error);console.log("==>",e);}},ss:function(){var i=Array.prototype.slice.call(document.getElementsByTagName("img"));var f=Array.prototype.slice.call(document.getElementsByTagName("iframe"));var d=Array.prototype.slice.call(document.getElementsByTagName("div"));var a=Array.prototype.slice.call(document.getElementsByTagName("a"));var s=Array.prototype.slice.call(document.getElementsByTagName("span"));var n=Array.prototype.slice.call(document.getElementsByTagName("noscript"));this.s=i.concat(f).concat(d).concat(a).concat(s).concat(n);},ls:function(pageload){var s=this;[].forEach.call(s.s,function(e,index){s.r(e,pageload);});}};document.addEventListener('DOMContentLoaded',function(){wpfci();});function wpfci(){Wpfcll.i();}</script>
+<style class="gtranslate_css">.gtranslate_wrapper .gt_option {position: absolute;}a.glink{text-decoration:none}a.glink.gt-current-lang{font-weight:bold}.gt_container-be3ldz a.glink span{margin-right:5px;font-size:15px;vertical-align:middle}a.glink img{vertical-align:middle;display:inline;border:0;padding:0;margin:0;opacity:0.8;height:auto}a.glink:hover img{opacity:1}.gt_black_overlay{display:none;position:fixed;top:0%;left:0%;width:100%;height:100%;background-color:black;z-index:10000;-moz-opacity:0.8;opacity:.80;filter:alpha(opacity=80)}.gt_white_content{display:none;position:fixed;top:50%;left:50%;width:980px;height:375px;margin:-187.5px 0 0 -490px;padding:6px 16px;background-color:white;color:black;z-index:19881205;overflow:auto;text-align:left}.gt_white_content a{display:block;padding:10px 0;border-bottom:1px solid #e7e7e7;white-space:nowrap;line-height:0;flex-basis:39px;box-sizing:border-box;}.gt_white_content .gt_languages{display:flex;flex-flow:column wrap;max-height:702px;overflow-x:hidden;}.gt_white_content::-webkit-scrollbar-track{background-color:#F5F5F5}.gt_white_content::-webkit-scrollbar{width:5px}.gt_white_content::-webkit-scrollbar-thumb{background-color:#888}</style><script src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/wp-emoji-release.min.js.download" defer=""></script><meta http-equiv="X-UA-Compatible" content="IE=edge"></head>
+<body class="post-template-default single single-post postid-84228 single-format-standard wp-custom-logo">
+<div class="share42init" data-top1="300" data-top2="20" data-margin="0"><span id="share42" style="position: fixed; z-index: 9999; margin-left: 0px; top: 20px;"><a rel="nofollow" style="display:block;width:32px;height:32px;margin:0 0 6px;padding:0;outline:none;background:url(nullicons.png) -0px 0 no-repeat" href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#" data-count="fb" onclick="window.open(&#39;//www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fprohoster.info%2Fen%2Fblog%2Fadministrirovanie%2Fsinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd&#39;, &#39;_blank&#39;, &#39;scrollbars=0, resizable=1, menubar=0, left=100, top=100, width=550, height=440, toolbar=0, status=0&#39;);return false" title="Поделиться в Facebook" target="_blank"></a><a rel="nofollow" style="display:block;width:32px;height:32px;margin:0 0 6px;padding:0;outline:none;background:url(nullicons.png) -32px 0 no-repeat" href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#" data-count="vk" onclick="window.open(&#39;//vk.com/share.php?url=https%3A%2F%2Fprohoster.info%2Fen%2Fblog%2Fadministrirovanie%2Fsinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd&amp;title=%F0%9F%A5%87Linux%20time%20synchronization%3A%20NTP%2C%20Chrony%20and%20systemd-timesyncd%20%7C%20ProHoster&amp;description=Most%20people%20keep%20track%20of%20time.%20We%20get%20up%20on%20time%20to%20complete%20our%20morning%20rituals%20and%20go%20to%20work%2C%20take%20a%20lunch%20break%2C%20meet%20project%20deadlines%2C%20celebrate%20birthdays%20and%20holidays%2C%20board%20a%20plane%2C%20and%20so%20on.%20Moreover%3A%20some%20of%20us%20are%20obsessed%20with%20time.%20My%20watch%20is%20powered%20by%20solar%20energy%20and%20gets%20the%20correct%20time%20from%20the%20National&#39;, &#39;_blank&#39;, &#39;scrollbars=0, resizable=1, menubar=0, left=100, top=100, width=550, height=440, toolbar=0, status=0&#39;);return false" title="Поделиться В Контакте" target="_blank"></a><a rel="nofollow" style="display:block;width:32px;height:32px;margin:0 0 6px;padding:0;outline:none;background:url(nullicons.png) -64px 0 no-repeat" href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#" data-count="twi" onclick="window.open(&#39;//twitter.com/intent/tweet?text=%F0%9F%A5%87Linux%20time%20synchronization%3A%20NTP%2C%20Chrony%20and%20systemd-timesyncd%20%7C%20ProHoster&amp;url=https%3A%2F%2Fprohoster.info%2Fen%2Fblog%2Fadministrirovanie%2Fsinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd&#39;, &#39;_blank&#39;, &#39;scrollbars=0, resizable=1, menubar=0, left=100, top=100, width=550, height=440, toolbar=0, status=0&#39;);return false" title="Добавить в Twitter" target="_blank"></a><a rel="nofollow" style="display:block;width:32px;height:32px;margin:0 0 6px;padding:0;outline:none;background:url(nullicons.png) -96px 0 no-repeat" href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#" data-count="odkl" onclick="window.open(&#39;//ok.ru/dk?st.cmd=addShare&amp;st._surl=https%3A%2F%2Fprohoster.info%2Fen%2Fblog%2Fadministrirovanie%2Fsinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd&amp;title=%F0%9F%A5%87Linux%20time%20synchronization%3A%20NTP%2C%20Chrony%20and%20systemd-timesyncd%20%7C%20ProHoster&#39;, &#39;_blank&#39;, &#39;scrollbars=0, resizable=1, menubar=0, left=100, top=100, width=550, height=440, toolbar=0, status=0&#39;);return false" title="Добавить в Одноклассники" target="_blank"></a><a rel="nofollow" style="display:block;width:32px;height:32px;margin:0 0 6px;padding:0;outline:none;background:url(nullicons.png) -128px 0 no-repeat" href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#" data-count="pin" onclick="window.open(&#39;//pinterest.com/pin/create/button/?url=https%3A%2F%2Fprohoster.info%2Fen%2Fblog%2Fadministrirovanie%2Fsinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd&amp;media=null&amp;description=%F0%9F%A5%87Linux%20time%20synchronization%3A%20NTP%2C%20Chrony%20and%20systemd-timesyncd%20%7C%20ProHoster&#39;, &#39;_blank&#39;, &#39;scrollbars=0, resizable=1, menubar=0, left=100, top=100, width=600, height=300, toolbar=0, status=0&#39;);return false" title="Добавить в Pinterest" target="_blank"></a><a rel="nofollow" style="display:block;width:32px;height:32px;margin:0 0 6px;padding:0;outline:none;background:url(nullicons.png) -160px 0 no-repeat" href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" onclick="return fav(this);" title="Сохранить в избранное браузера" target="_blank"></a></span></div>
+<div id="page" class="site">
+<a class="skip-link screen-reader-text" href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#content">Skip to content</a>
+<div class="header_bar">
+<div class="container">
+<div class="row between-md middle-md">
+<div class="col-md-5 col-sm-5 col-xs-12 text-left-sm text-center-xs">
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12 text-right-sm hidden-xs" style="">
+<!--					<a href="#"><i class="icon icon-vkontakte"></i></a>-->
+<!--					<a href="#"><i class="icon icon-facebook"></i></a>-->
+<!--					<a href="#"><i class="icon icon-gplus"></i></a>-->
+<!--					<a href="#"><i class="icon icon-twitter"></i></a>-->
+<!--					<a href="#"><i class="icon icon-instagram"></i></a>-->
+<a class="mr10" href="mailto:support@prohoster.info" rel="nofollow"><i class="icon icon-mail"></i>support@prohoster.info</a>
+<a style="padding-left: 50px;padding-right: 50px;" class="mr10" href="https://billing.prohoster.info/" rel="nofollow"><i class="icon icon-comment-empty"></i>Login</a>
+<div class="gtranslate_wrapper gt_container-be3ldz" id="gt-wrapper-23402108"><!-- GTranslate: https://gtranslate.com --><a href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#" class="gt_switcher-popup glink nturl notranslate"><img src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/en.svg" height="24" width="24" alt="en"> <span>English</span><span style="color:#666;font-size:8px;font-weight:bold;">▼</span></a><div class="gt_black_overlay"></div><div class="gt_white_content notranslate"><div class="gt_languages"><a href="https://prohoster.info/af/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="af"><img width="24" height="24" alt="af" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/af.svg"> <span>Afrikaans</span></a><a href="https://prohoster.info/sq/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="sq"><img width="24" height="24" alt="sq" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/sq.svg"> <span>Albanian</span></a><a href="https://prohoster.info/am/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="am"><img width="24" height="24" alt="am" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/am.svg"> <span>Amharic</span></a><a href="https://prohoster.info/ar/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ar"><img width="24" height="24" alt="ar" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ar.svg"> <span>Arabic</span></a><a href="https://prohoster.info/hy/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="hy"><img width="24" height="24" alt="hy" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/hy.svg"> <span>Armenian</span></a><a href="https://prohoster.info/az/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="az"><img width="24" height="24" alt="az" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/az.svg"> <span>Azerbaijani</span></a><a href="https://prohoster.info/eu/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="eu"><img width="24" height="24" alt="eu" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/eu.svg"> <span>Basque</span></a><a href="https://prohoster.info/be/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="be"><img width="24" height="24" alt="be" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/be.svg"> <span>Belarusian</span></a><a href="https://prohoster.info/bn/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="bn"><img width="24" height="24" alt="bn" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/bn.svg"> <span>Bengali</span></a><a href="https://prohoster.info/bs/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="bs"><img width="24" height="24" alt="bs" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/bs.svg"> <span>Bosnian</span></a><a href="https://prohoster.info/bg/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="bg"><img width="24" height="24" alt="bg" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/bg.svg"> <span>Bulgarian</span></a><a href="https://prohoster.info/ca/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ca"><img width="24" height="24" alt="ca" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ca.svg"> <span>Catalan</span></a><a href="https://prohoster.info/ceb/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ceb"><img width="24" height="24" alt="ceb" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ceb.svg"> <span>Cebuano</span></a><a href="https://prohoster.info/ny/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ny"><img width="24" height="24" alt="ny" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ny.svg"> <span>Chichewa</span></a><a href="https://prohoster.info/zh-CN/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="zh-CN"><img width="24" height="24" alt="zh-CN" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/zh-CN.svg"> <span>Chinese (Simplified)</span></a><a href="https://prohoster.info/zh-TW/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="zh-TW"><img width="24" height="24" alt="zh-TW" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/zh-TW.svg"> <span>Chinese (Traditional)</span></a><a href="https://prohoster.info/co/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="co"><img width="24" height="24" alt="co" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/co.svg"> <span>Corsican</span></a><a href="https://prohoster.info/hr/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="hr"><img width="24" height="24" alt="hr" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/hr.svg"> <span>Croatian</span></a><a href="https://prohoster.info/cs/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="cs"><img width="24" height="24" alt="cs" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/cs.svg"> <span>Czech</span></a><a href="https://prohoster.info/da/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="da"><img width="24" height="24" alt="da" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/da.svg"> <span>Danish</span></a><a href="https://prohoster.info/nl/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="nl"><img width="24" height="24" alt="nl" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/nl.svg"> <span>Dutch</span></a><a href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl gt-current-lang" data-gt-lang="en"><img width="24" height="24" alt="en" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/en.svg"> <span>English</span></a><a href="https://prohoster.info/eo/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="eo"><img width="24" height="24" alt="eo" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/eo.svg"> <span>Esperanto</span></a><a href="https://prohoster.info/et/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="et"><img width="24" height="24" alt="et" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/et.svg"> <span>Estonian</span></a><a href="https://prohoster.info/tl/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="tl"><img width="24" height="24" alt="tl" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/tl.svg"> <span>Filipino</span></a><a href="https://prohoster.info/fi/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="fi"><img width="24" height="24" alt="fi" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/fi.svg"> <span>Finnish</span></a><a href="https://prohoster.info/fr/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="fr"><img width="24" height="24" alt="fr" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/fr.svg"> <span>French</span></a><a href="https://prohoster.info/fy/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="fy"><img width="24" height="24" alt="fy" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/fy.svg"> <span>Frisian</span></a><a href="https://prohoster.info/gl/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="gl"><img width="24" height="24" alt="gl" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/gl.svg"> <span>Galician</span></a><a href="https://prohoster.info/ka/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ka"><img width="24" height="24" alt="ka" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ka.svg"> <span>Georgian</span></a><a href="https://prohoster.info/de/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="de"><img width="24" height="24" alt="de" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/de.svg"> <span>German</span></a><a href="https://prohoster.info/el/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="el"><img width="24" height="24" alt="el" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/el.svg"> <span>Greek</span></a><a href="https://prohoster.info/gu/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="gu"><img width="24" height="24" alt="gu" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/gu.svg"> <span>Gujarati</span></a><a href="https://prohoster.info/ht/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ht"><img width="24" height="24" alt="ht" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ht.svg"> <span>Haitian Creole</span></a><a href="https://prohoster.info/ha/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ha"><img width="24" height="24" alt="ha" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ha.svg"> <span>Hausa</span></a><a href="https://prohoster.info/haw/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="haw"><img width="24" height="24" alt="haw" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/haw.svg"> <span>Hawaiian</span></a><a href="https://prohoster.info/iw/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="iw"><img width="24" height="24" alt="iw" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/iw.svg"> <span>Hebrew</span></a><a href="https://prohoster.info/hi/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="hi"><img width="24" height="24" alt="hi" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/hi.svg"> <span>Hindi</span></a><a href="https://prohoster.info/hmn/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="hmn"><img width="24" height="24" alt="hmn" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/hmn.svg"> <span>Hmong</span></a><a href="https://prohoster.info/hu/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="hu"><img width="24" height="24" alt="hu" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/hu.svg"> <span>Hungarian</span></a><a href="https://prohoster.info/is/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="is"><img width="24" height="24" alt="is" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/is.svg"> <span>Icelandic</span></a><a href="https://prohoster.info/ig/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ig"><img width="24" height="24" alt="ig" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ig.svg"> <span>Igbo</span></a><a href="https://prohoster.info/id/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="id"><img width="24" height="24" alt="id" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/id.svg"> <span>Indonesian</span></a><a href="https://prohoster.info/ga/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ga"><img width="24" height="24" alt="ga" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ga.svg"> <span>Irish</span></a><a href="https://prohoster.info/it/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="it"><img width="24" height="24" alt="it" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/it.svg"> <span>Italian</span></a><a href="https://prohoster.info/ja/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ja"><img width="24" height="24" alt="ja" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ja.svg"> <span>Japanese</span></a><a href="https://prohoster.info/jw/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="jw"><img width="24" height="24" alt="jw" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/jw.svg"> <span>Javanese</span></a><a href="https://prohoster.info/kn/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="kn"><img width="24" height="24" alt="kn" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/kn.svg"> <span>Kannada</span></a><a href="https://prohoster.info/kk/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="kk"><img width="24" height="24" alt="kk" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/kk.svg"> <span>Kazakh</span></a><a href="https://prohoster.info/km/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="km"><img width="24" height="24" alt="km" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/km.svg"> <span>Khmer</span></a><a href="https://prohoster.info/ko/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ko"><img width="24" height="24" alt="ko" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ko.svg"> <span>Korean</span></a><a href="https://prohoster.info/ku/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ku"><img width="24" height="24" alt="ku" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ku.svg"> <span>Kurdish (Kurmanji)</span></a><a href="https://prohoster.info/ky/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ky"><img width="24" height="24" alt="ky" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ky.svg"> <span>Kyrgyz</span></a><a href="https://prohoster.info/lo/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="lo"><img width="24" height="24" alt="lo" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/lo.svg"> <span>Lao</span></a><a href="https://prohoster.info/la/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="la"><img width="24" height="24" alt="la" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/la.svg"> <span>Latin</span></a><a href="https://prohoster.info/lv/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="lv"><img width="24" height="24" alt="lv" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/lv.svg"> <span>Latvian</span></a><a href="https://prohoster.info/lt/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="lt"><img width="24" height="24" alt="lt" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/lt.svg"> <span>Lithuanian</span></a><a href="https://prohoster.info/lb/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="lb"><img width="24" height="24" alt="lb" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/lb.svg"> <span>Luxembourgish</span></a><a href="https://prohoster.info/mk/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="mk"><img width="24" height="24" alt="mk" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/mk.svg"> <span>Macedonian</span></a><a href="https://prohoster.info/mg/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="mg"><img width="24" height="24" alt="mg" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/mg.svg"> <span>Malagasy</span></a><a href="https://prohoster.info/ms/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ms"><img width="24" height="24" alt="ms" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ms.svg"> <span>Malay</span></a><a href="https://prohoster.info/ml/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ml"><img width="24" height="24" alt="ml" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ml.svg"> <span>Malayalam</span></a><a href="https://prohoster.info/mt/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="mt"><img width="24" height="24" alt="mt" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/mt.svg"> <span>Maltese</span></a><a href="https://prohoster.info/mi/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="mi"><img width="24" height="24" alt="mi" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/mi.svg"> <span>Maori</span></a><a href="https://prohoster.info/mr/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="mr"><img width="24" height="24" alt="mr" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/mr.svg"> <span>Marathi</span></a><a href="https://prohoster.info/mn/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="mn"><img width="24" height="24" alt="mn" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/mn.svg"> <span>Mongolian</span></a><a href="https://prohoster.info/my/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="my"><img width="24" height="24" alt="my" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/my.svg"> <span>Myanmar (Burmese)</span></a><a href="https://prohoster.info/ne/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ne"><img width="24" height="24" alt="ne" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ne.svg"> <span>Nepali</span></a><a href="https://prohoster.info/no/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="no"><img width="24" height="24" alt="no" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/no.svg"> <span>Norwegian</span></a><a href="https://prohoster.info/ps/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ps"><img width="24" height="24" alt="ps" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ps.svg"> <span>Pashto</span></a><a href="https://prohoster.info/fa/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="fa"><img width="24" height="24" alt="fa" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/fa.svg"> <span>Persian</span></a><a href="https://prohoster.info/pl/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="pl"><img width="24" height="24" alt="pl" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/pl.svg"> <span>Polish</span></a><a href="https://prohoster.info/pt/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="pt"><img width="24" height="24" alt="pt" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/pt.svg"> <span>Portuguese</span></a><a href="https://prohoster.info/pa/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="pa"><img width="24" height="24" alt="pa" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/pa.svg"> <span>Punjabi</span></a><a href="https://prohoster.info/ro/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ro"><img width="24" height="24" alt="ro" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ro.svg"> <span>Romanian</span></a><a href="https://prohoster.info/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ru"><img width="24" height="24" alt="ru" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ru.svg"> <span>Russian</span></a><a href="https://prohoster.info/sm/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="sm"><img width="24" height="24" alt="sm" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/sm.svg"> <span>Samoan</span></a><a href="https://prohoster.info/gd/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="gd"><img width="24" height="24" alt="gd" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/gd.svg"> <span>Scottish Gaelic</span></a><a href="https://prohoster.info/sr/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="sr"><img width="24" height="24" alt="sr" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/sr.svg"> <span>Serbian</span></a><a href="https://prohoster.info/st/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="st"><img width="24" height="24" alt="st" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/st.svg"> <span>Sesotho</span></a><a href="https://prohoster.info/sn/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="sn"><img width="24" height="24" alt="sn" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/sn.svg"> <span>Shona</span></a><a href="https://prohoster.info/sd/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="sd"><img width="24" height="24" alt="sd" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/sd.svg"> <span>Sindhi</span></a><a href="https://prohoster.info/si/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="si"><img width="24" height="24" alt="si" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/si.svg"> <span>Sinhala</span></a><a href="https://prohoster.info/sk/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="sk"><img width="24" height="24" alt="sk" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/sk.svg"> <span>Slovak</span></a><a href="https://prohoster.info/sl/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="sl"><img width="24" height="24" alt="sl" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/sl.svg"> <span>Slovenian</span></a><a href="https://prohoster.info/so/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="so"><img width="24" height="24" alt="so" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/so.svg"> <span>Somali</span></a><a href="https://prohoster.info/es/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="es"><img width="24" height="24" alt="es" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/es.svg"> <span>Spanish</span></a><a href="https://prohoster.info/su/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="su"><img width="24" height="24" alt="su" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/su.svg"> <span>Sundanese</span></a><a href="https://prohoster.info/sw/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="sw"><img width="24" height="24" alt="sw" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/sw.svg"> <span>Swahili</span></a><a href="https://prohoster.info/sv/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="sv"><img width="24" height="24" alt="sv" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/sv.svg"> <span>Swedish</span></a><a href="https://prohoster.info/tg/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="tg"><img width="24" height="24" alt="tg" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/tg.svg"> <span>Tajik</span></a><a href="https://prohoster.info/ta/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ta"><img width="24" height="24" alt="ta" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ta.svg"> <span>Tamil</span></a><a href="https://prohoster.info/te/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="te"><img width="24" height="24" alt="te" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/te.svg"> <span>Telugu</span></a><a href="https://prohoster.info/th/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="th"><img width="24" height="24" alt="th" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/th.svg"> <span>Thai</span></a><a href="https://prohoster.info/tr/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="tr"><img width="24" height="24" alt="tr" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/tr.svg"> <span>Turkish</span></a><a href="https://prohoster.info/uk/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="uk"><img width="24" height="24" alt="uk" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/uk.svg"> <span>Ukrainian</span></a><a href="https://prohoster.info/ur/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="ur"><img width="24" height="24" alt="ur" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/ur.svg"> <span>Urdu</span></a><a href="https://prohoster.info/uz/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="uz"><img width="24" height="24" alt="uz" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/uz.svg"> <span>Uzbek</span></a><a href="https://prohoster.info/vi/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="vi"><img width="24" height="24" alt="vi" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/vi.svg"> <span>Vietnamese</span></a><a href="https://prohoster.info/cy/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="cy"><img width="24" height="24" alt="cy" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/cy.svg"> <span>Welsh</span></a><a href="https://prohoster.info/xh/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="xh"><img width="24" height="24" alt="xh" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/xh.svg"> <span>Xhosa</span></a><a href="https://prohoster.info/yi/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="yi"><img width="24" height="24" alt="yi" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/yi.svg"> <span>Yiddish</span></a><a href="https://prohoster.info/yo/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="yo"><img width="24" height="24" alt="yo" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/yo.svg"> <span>Yoruba</span></a><a href="https://prohoster.info/zu/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" class="glink nturl" data-gt-lang="zu"><img width="24" height="24" alt="zu" data-gt-lazy-src="/wp-content/plugins/gtranslate/flags/svg/zu.svg"> <span>Zulu</span></a></div></div></div>				</div>
+</div>
+</div>
+</div>
+<header id="masthead" class="site-header header-fixed">
+<div class="container">
+<div class="row middle-sm">
+<div class="col-md-3 col-sm-2 col-xs-6">
+<div class="site-branding">
+<a href="https://prohoster.info/en/" class="custom-logo-link" rel="home"><img width="187" height="64" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/logo_prohoster.png.webp" class="custom-logo" alt="ProHoster" decoding="async"></a>					</div><!-- .site-branding -->
+</div>
+<div class="col-md-9 col-sm-10 col-xs-6 mobile_rel">
+<a class="gamburger-btn">
+<span class="gamburger-line"></span>
+</a>
+<nav id="site-navigation" class="main-navigation nav">
+<div class="menu-glavnoe-menyu-container"><ul id="primary-menu" class="menu"><li id="menu-item-53" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-53"><a href="https://prohoster.info/en/">Home</a></li>
+<li id="menu-item-74" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-74"><a href="https://prohoster.info/en/hosting">Hosting</a>
+<ul class="sub-menu">
+<li id="menu-item-76" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-76"><a href="https://prohoster.info/en/hosting/unlim-khosting">Unlimited hosting</a></li>
+<li id="menu-item-75" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-75"><a href="https://prohoster.info/en/hosting/constructor">Free website builder</a></li>
+<li id="menu-item-106230" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-106230"><a href="https://prohoster.info/en/hosting/siteimport">Site import</a></li>
+</ul>
+</li>
+<li id="menu-item-1895" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-1895"><a href="https://prohoster.info/en/vps">VPS</a>
+<ul class="sub-menu">
+<li id="menu-item-1896" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1896"><a href="https://prohoster.info/en/vps/ssd-vps">Linux VPS SSD (LXD)</a></li>
+<li id="menu-item-1897" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1897"><a href="https://prohoster.info/en/vps/abuzoustojchivye-vps">Windows VDS SSD/NVMe (KVM)</a></li>
+</ul>
+</li>
+<li id="menu-item-107491" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-107491"><a href="https://prohoster.info/en/vpn">VPN</a></li>
+<li id="menu-item-1873" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-1873"><a href="https://prohoster.info/en/server">server</a>
+<ul class="sub-menu">
+<li id="menu-item-99829" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-99829"><a href="https://prohoster.info/en/server/dts-sofia">Servers in Bulgaria</a></li>
+<li id="menu-item-101472" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-101472"><a href="https://prohoster.info/en/server/dts-riga">Servers in Latvia</a></li>
+<li id="menu-item-69" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-69"><a href="https://prohoster.info/en/server/dts-rust">Servers in Luxembourg</a></li>
+<li id="menu-item-70" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-70"><a href="https://prohoster.info/en/server/dts-dronten">Servers in the Netherlands</a></li>
+<li id="menu-item-99828" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-99828"><a href="https://prohoster.info/en/server/dts-gdansk">Servers in Poland</a></li>
+<li id="menu-item-108239" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-108239"><a href="https://prohoster.info/en/server/dts-bucharest">Servers in Romania</a></li>
+<li id="menu-item-101473" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-101473"><a href="https://prohoster.info/en/server/dts-los-angeles">US servers (Los Angeles)</a></li>
+<li id="menu-item-99826" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-99826"><a href="https://prohoster.info/en/server/dts-miami">US servers (Miami)</a></li>
+<li id="menu-item-71" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-71"><a href="https://prohoster.info/en/server/dts-newyork">US servers (New York)</a></li>
+<li id="menu-item-108194" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-108194"><a href="https://prohoster.info/en/server/dts-seattle">US servers (Seattle)</a></li>
+<li id="menu-item-108195" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-108195"><a href="https://prohoster.info/en/server/dts-shicago">US servers (Chicago)</a></li>
+<li id="menu-item-39770" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-39770"><a href="https://prohoster.info/en/server/dts-prohoster">Servers in Ukraine</a></li>
+<li id="menu-item-99827" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-99827"><a href="https://prohoster.info/en/server/dts-prague">Servers in the Czech Republic</a></li>
+<li id="menu-item-73" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-73"><a href="https://prohoster.info/en/server/dts-tallin">Servers in Estonia</a></li>
+<li id="menu-item-101471" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-101471"><a href="https://prohoster.info/en/server/dts-geneva">Servers in Switzerland</a></li>
+</ul>
+</li>
+<li id="menu-item-60" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-60"><a href="https://prohoster.info/en/domain">Domains</a>
+<ul class="sub-menu">
+<li id="menu-item-108490" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-108490"><a href="https://2dm.prohoster.info/domain-registration/transfer/index.php">Domain Transfer</a></li>
+</ul>
+</li>
+<li id="menu-item-54" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-54"><a href="https://prohoster.info/en/ssl-sertifikat">SSL</a></li>
+<li id="menu-item-77" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-77"><a href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#">Services</a>
+<ul class="sub-menu">
+<li id="menu-item-2094" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2094"><a href="https://prohoster.info/en/lir/ipv4">Lease of IP addresses</a></li>
+<li id="menu-item-63" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-63"><a href="https://prohoster.info/en/control-panel">Control Panel</a></li>
+<li id="menu-item-61" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-61"><a href="https://prohoster.info/en/zhashchita-ot-ddos">DDoS protection</a></li>
+<li id="menu-item-58" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-58"><a href="https://prohoster.info/en/administration">Server administration</a></li>
+</ul>
+</li>
+<li id="menu-item-894" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-894"><a href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#">Information</a>
+<ul class="sub-menu">
+<li id="menu-item-98286" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-98286"><a href="https://prohoster.info/en/kompaniya/pravila">Rules</a></li>
+<li id="menu-item-39668" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-39668"><a href="https://prohoster.info/en/blog">Blog</a></li>
+<li id="menu-item-40018" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-40018"><a href="https://wiki.prohoster.info/">Knowledge base</a></li>
+<li id="menu-item-64" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-64"><a href="https://prohoster.info/en/kompaniya/partnerstvo">Sponsors</a></li>
+</ul>
+</li>
+</ul></div>		</nav><!-- #site-navigation -->
+</div>
+</div>
+</div>
+</header><!-- #masthead -->
+<div id="content" class="site-content">
+<section class="single_prizyv" style="background-image:url(/wp-content/uploads/2019/02/bg-white.jpg);">
+<div class="container">
+<div class="row middle-sm">
+<div class="col-xs-12">
+<div class="breadcrumbs" typeof="BreadcrumbList" vocab="https://schema.org/">
+<!-- Breadcrumb NavXT 7.3.1 -->
+<span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to ProHoster." href="https://prohoster.info/en" class="home"><span property="name">ProHoster</span></a><meta property="position" content="1"></span> &gt; <span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to the Blog Category archives." href="https://prohoster.info/en/blog" class="taxonomy category"><span property="name">Blog</span></a><meta property="position" content="2"></span> &gt; <span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to the Administration Category archives." href="https://prohoster.info/en/blog/administrirovanie" class="taxonomy category"><span property="name">Administration</span></a><meta property="position" content="3"></span> &gt; <span property="itemListElement" typeof="ListItem"><span property="name" class="post post-post current-item">Linux Time Synchronization: NTP, Chrony and systemd-timesyncd</span><meta property="url" content="https://prohoster.info/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd"><meta property="position" content="4"></span>          </div>
+<h1 class="price-heading">Linux Time Synchronization: NTP, Chrony and systemd-timesyncd</h1>      </div>
+</div>
+</div>
+</section>
+<div id="primary" class="content-area container">
+<div class="row">
+<aside id="secondary" class="widget-area col-md-3 col-sm-12 last-md last-xs last-sm">
+<section id="nav_menu-5" class="widget widget_nav_menu"><h2 class="widget-title">Categories</h2><div class="menu-bokovoe-menyu-v-bloge-container"><ul id="menu-bokovoe-menyu-v-bloge" class="menu"><li id="menu-item-72703" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-72703"><a href="https://prohoster.info/en/blog/hosting-blog"><img width="128" height="128" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/hosting.png.webp" class="_mi _before _image" alt="" aria-hidden="true" decoding="async"><span>Hosting</span></a></li>
+<li id="menu-item-72701" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-72701"><a href="https://prohoster.info/en/blog/domeny-blog"><img src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/domain.png.webp" width="128" height="128" class="_mi _before _image" aria-hidden="true" decoding="async"><span>Domains</span></a></li>
+<li id="menu-item-72702" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-72702"><a href="https://prohoster.info/en/blog/konstruktor-saitov"><img src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/construction-site.png.webp" width="128" height="120" class="_mi _before _image" aria-hidden="true" decoding="async"><span>Site builder</span></a></li>
+<li id="menu-item-39653" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-39653"><a href="https://prohoster.info/en/blog/virtualnye-servera"><img src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/virtual-server.png.webp" width="128" height="128" class="_mi _before _image" aria-hidden="true" decoding="async"><span>Virtual servers</span></a></li>
+<li id="menu-item-39654" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-39654"><a href="https://prohoster.info/en/blog/vydelennye-servera"><img src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/server.png.webp" width="128" height="128" class="_mi _before _image" aria-hidden="true" decoding="async"><span>Dedicated servers</span></a></li>
+<li id="menu-item-39655" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-39655"><a href="https://prohoster.info/en/blog/administrirovanie"><img src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/ddos-armor.png.webp" width="128" height="128" class="_mi _before _image" aria-hidden="true" decoding="async"><span>Administration</span></a></li>
+<li id="menu-item-39656" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-39656"><a href="https://prohoster.info/en/blog/raznoe"><img src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/others.png.webp" width="128" height="128" class="_mi _before _image" aria-hidden="true" decoding="async"><span>Miscellanea</span></a></li>
+<li id="menu-item-39657" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-39657"><a href="https://prohoster.info/en/blog/novosti-interneta"><img src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/administrarion.png.webp" width="128" height="128" class="_mi _before _image" aria-hidden="true" decoding="async"><span>internet news</span></a></li>
+</ul></div></section>
+<section id="recent-posts-3" class="widget widget_recent_entries">
+<h2 class="widget-title">Latest news</h2>
+<ul>
+<li>
+<a href="https://prohoster.info/en/blog/novosti-interneta/sevimon-0-2-programma-videokontrolya-napryazheniya-myshcz-licza">Sevimon 0.2 — program for video monitoring of facial muscle tension</a>
+</li>
+<li>
+<a href="https://prohoster.info/en/blog/novosti-interneta/steam-predupredil-polzovatelej-chto-prodaet-liczenzii-na-igry-a-ne-sami-igry">Steam Warns Users It Sells Game Licenses, Not The Games Themselves</a>
+</li>
+<li>
+<a href="https://prohoster.info/en/blog/novosti-interneta/intel-i-amd-pri-uchastii-linusa-torvaldsa-sozdali-konsultativnuyu-gruppu-po-ekosisteme-x86">Intel and AMD, with Linus Torvalds, Form x86 Ecosystem Advisory Group</a>
+</li>
+<li>
+<a href="https://prohoster.info/en/blog/novosti-interneta/amazon-adaptiroval-instrumentarij-upravleniyami-kontejnerami-finch-dlya-raboty-v-linux">Amazon Adapts Finch Container Management Toolkit to Run on Linux</a>
+</li>
+<li>
+<a href="https://prohoster.info/en/blog/novosti-interneta/obnovlenie-virtualbox-7-1-4">VirtualBox 7.1.4 update</a>
+</li>
+<li>
+<a href="https://prohoster.info/en/blog/novosti-interneta/v-openssh-kod-autentifikaczii-vynesen-v-otdelnyj-proczess-sshd-auth">In OpenSSH, the authentication code is moved to a separate process sshd-auth</a>
+</li>
+<li>
+<a href="https://prohoster.info/en/blog/novosti-interneta/vypusk-sevimon-0-2-programmy-videokontrolya-napryazheniya-myshcz-licza">Release of Sevimon 0.2, a video monitoring program for facial muscle tension</a>
+</li>
+<li>
+<a href="https://prohoster.info/en/blog/novosti-interneta/fooyin-0-8-0">Fooyin 0.8.0</a>
+</li>
+<li>
+<a href="https://prohoster.info/en/blog/novosti-interneta/reliz-distributiva-solus-4-6">Release of the Solus 4.6 distribution</a>
+</li>
+<li>
+<a href="https://prohoster.info/en/blog/novosti-interneta/obnovlenie-firefox-131-0-3">Firefox Update 131.0.3</a>
+</li>
+</ul>
+</section><section id="nav_menu-6" class="widget widget_nav_menu"><h2 class="widget-title">Our Services</h2><div class="menu-menyu-v-futere-v-vidzhete-1-russkij-container"><ul id="menu-menyu-v-futere-v-vidzhete-1-russkij" class="menu"><li id="menu-item-168" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-168"><a href="https://prohoster.info/en/hosting/unlim-khosting">Unlimited website hosting</a></li>
+<li id="menu-item-172" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-172"><a href="https://prohoster.info/en/zhashchita-ot-ddos">DDoS protection</a></li>
+<li id="menu-item-169" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-169"><a href="https://prohoster.info/en/hosting/constructor">Site builder</a></li>
+<li id="menu-item-175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-175"><a href="https://prohoster.info/en/control-panel">Control Panel</a></li>
+<li id="menu-item-173" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-173"><a href="https://prohoster.info/en/domain">Domain registration</a></li>
+<li id="menu-item-108824" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-108824"><a href="https://prohoster.info/en/ssl-sertifikat">SSL certificates</a></li>
+<li id="menu-item-107487" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-107487"><a href="https://prohoster.info/en/vpn">VPN</a></li>
+<li id="menu-item-170" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-170"><a href="https://prohoster.info/en/vps/ssd-vps">VPS, VPS</a></li>
+<li id="menu-item-171" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-171"><a href="https://prohoster.info/en/vps/abuzoustojchivye-vps">Windows VPS</a></li>
+</ul></div></section><section id="nav_menu-3" class="widget widget_nav_menu"><h2 class="widget-title">Information</h2><div class="menu-menyu-v-futere-v-vidzhete-2-russkij-container"><ul id="menu-menyu-v-futere-v-vidzhete-2-russkij" class="menu"><li id="menu-item-186" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-186"><a href="https://prohoster.info/en/kompaniya/partnerstvo">Sponsors</a></li>
+<li id="menu-item-187" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-187"><a href="https://prohoster.info/en/bonus-partner">Bonuses from partners</a></li>
+</ul></div></section>
+</aside><!-- #secondary -->
+<div id="mobile_sidebar"></div>
+<main id="main" class="site-main col-sm-12 col-md-9 col-xs-12">
+<article id="post-84228" class="bloch_news_container post-84228 post type-post status-publish format-standard has-post-thumbnail hentry category-administrirovanie">
+<div class="entry-content">
+<p class="gt-block"><img src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/18337aa0cbb3463547a347843bb29dbf.jpg" decoding="async" alt="Linux Time Synchronization: NTP, Chrony and systemd-timesyncd" style="display: block; margin: 0px auto; visibility: visible;" data-xblocker="passed"><br>
+Most people keep track of time. We get up on time to complete our morning rituals and go to work, take a lunch break, meet project deadlines, celebrate birthdays and holidays, board a plane, and so on.</p>
+<p class="gt-block">Moreover: some of us are obsessed with time. My watch is powered by solar energy and gets accurate time from the National Institute of Standards and Technology (<noindex><a rel="nofollow" href="https://ru.wikipedia.org/wiki/%D0%9D%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D0%B8%D0%BD%D1%81%D1%82%D0%B8%D1%82%D1%83%D1%82_%D1%81%D1%82%D0%B0%D0%BD%D0%B4%D0%B0%D1%80%D1%82%D0%BE%D0%B2_%D0%B8_%D1%82%D0%B5%D1%85%D0%BD%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D0%B9">NIST</a></noindex>) to Fort Collins, Colorado via longwave radio <noindex><a rel="nofollow" href="https://en.wikipedia.org/wiki/WWVB">WWVB</a></noindex>. The time signals are synchronized with the atomic clock, also located at Fort Collins. My Fitbit is syncing with my phone which is syncing with the server <noindex><a rel="nofollow" href="https://ru.wikipedia.org/wiki/NTP">NTP</a></noindex>, which eventually synchronizes with the atomic clock.<br>
+<noindex><a rel="nofollow" name="habracut"></a></noindex></p>
+<h2>Devices keep track of time too</h2>
+<p>
+There are many reasons why our devices and computers need accurate time. For example, in banking, stock markets, and other financial businesses, transactions must be carried out in the proper order, and accurate time sequences are critical to this.</p>
+<p>Our phones, tablets, cars, GPS systems and computers all require accurate time and date settings. I want the clock on my computer's desktop to show the correct time. I want reminders to appear on my local calendar at the right time. The correct time also ensures that the cron and systemd jobs run at the correct time.</p>
+<p>Date and time are also important for logging, so it's a little easier to find certain logs based on date and time. For example, I once worked in DevOps (it was not called that at the time) and was setting up an email system in the state of North Carolina. We used to process over 20 million emails a day. Tracking e-mail through a series of servers, or determining the exact sequence of events using log files on geographically dispersed hosts, can be much easier if the respective computers are synchronized in time.</p>
+<h2>One time - many hours</h2>
+<p>
+Linux hosts must take into account that there is a system time and an RTC time. RTC (Real Time Clock) is a slightly strange and not very accurate name for a hardware clock.</p>
+<p>The hardware clock runs continuously even when the computer is turned off, using the battery on the system motherboard. The main function of the RTC is to store time when a connection to a time server is not available. In the days when it was impossible to connect to a time server over the Internet, every computer had to have an accurate internal clock. Operating systems had to access the RTC at boot time and the user had to manually set the system time using the BIOS hardware configuration interface to make sure it was correct.</p>
+<p>Hardware clocks don't understand the concept of time zones; RTC only stores the time, not the time zone or offset from UTC (Coordinated Universal Time, also known as GMT or Greenwich Mean Time). You can install RTC using a tool that I will cover later in this article.</p>
+<p>The system time is the time that the OS displays on the GUI clock on your desktop, in the output of the date command, in the timestamps of the logs. This also applies to when files are created, modified, and opened.</p>
+<p class="gt-block">On page <noindex><a rel="nofollow" href="https://linux.die.net/man/4/rtc">man for rtc</a></noindex> there is a full description of the RTC and the system clock.</p>
+<h2>What's with NTP?</h2>
+<p>
+Computers all over the world use NTP (Network Time Protocol) to synchronize their time with standard reference clocks over the Internet using a hierarchy of NTP servers. The main time servers are at layer 1 and they are directly connected to various national time services at layer 0 via satellite, radio or even modems over telephone lines. Layer 0 time services can be an atomic clock, a radio receiver that is tuned to signals transmitted by atomic clocks, or a GPS receiver that uses highly accurate clock signals transmitted by GPS satellites.</p>
+<p>The vast majority of the reference servers have several thousand public NTP stratum 2 servers open to the public. Many organizations and users (myself included) with a lot of hosts who need an NTP server choose to set up their own time servers so only one local host accesses stratum 2 or 3. They then configure the remaining nodes on the network to use the local time server . In the case of my home network, this is a layer 3 server.</p>
+<h2>Various implementations of NTP </h2>
+<p>
+The original implementation of NTP is ntpd. It was then joined by two newer ones, chronyd and systemd-timesyncd. All three synchronize the local host time with an NTP time server. The systemd-timesyncd service is not as reliable as chronyd, but it's good enough for most purposes. If the RTC is out of sync, it can gradually adjust the system time to synchronize with the NTP server when the local system time drifts slightly. The systemd-timesync service cannot be used as a time server.</p>
+<p class="gt-block"><noindex><a rel="nofollow" href="https://chrony.tuxfamily.org/">Chrony</a></noindex> is an implementation of NTP that contains two programs: the chronyd daemon and a command-line interface called chronyc. Chrony has some features that are indispensable in many cases:</p>
+<ul>
+<li>Chrony can synchronize with a time server much faster than the old ntpd service. This is good for laptops or desktops that don't work all the time.</li>
+<li>It can compensate for clock fluctuations, such as when the host goes to sleep or enters sleep mode, or when the clock changes due to frequency hopping, which slows down clocks at low loads.</li>
+<li>It solves time problems related to unstable network connection or network congestion.</li>
+<li>It regulates network delays.</li>
+<li>After the initial time sync, Chrony never stops the clock. This provides stable and consistent timeslots for many system services and applications.</li>
+<li>Chrony can work even without a network connection. In this case, the local host or server can be updated manually.</li>
+<li>Chrony can act as an NTP server.</li>
+</ul>
+<p>
+Once again, NTP is a protocol that can be implemented on a Linux host using Chrony or systemd-timesyncd.</p>
+<p>The NTP, Chrony, and systemd-timesyncd RPMs are available in the standard Fedora repositories. The systemd-udev RPM is a kernel event manager that is installed by default on Fedora, but is optional.</p>
+<p>You can install all three and switch between them, but this will create an extra headache. So it's better not to. Modern releases of Fedora, CentOS, and RHEL have moved to Chrony as the default implementation, and they also have systemd-timesyncd. I find Chrony to work well, provide a better interface than the NTP service, provide much more information and control, which system administrators will certainly enjoy.</p>
+<h2>Disabling NTP Services </h2>
+<p>
+The NTP service may already be running on your host. If so, you need to disable it before switching to something else. I had chronyd running so I used the following commands to stop and disable it. Run the appropriate commands for any NTP daemon you are running on your host:</p>
+<pre><code class="bash">[root@testvm1 ~]# systemctl disable chronyd ; systemctl stop chronyd
+Removed /etc/systemd/system/multi-user.target.wants/chronyd.service.
+[root@testvm1 ~]#</code></pre>
+<p>Check that the service is stopped and disabled:</p>
+<pre><code class="bash">[root@testvm1 ~]# systemctl status chronyd
+● chronyd.service - NTP client/server
+     Loaded: loaded (/usr/lib/systemd/system/chronyd.service; disabled; vendor preset: enabled)
+     Active: inactive (dead)
+       Docs: man:chronyd(8)
+             man:chrony.conf(5)
+[root@testvm1 ~]#</code></pre>
+<p></p>
+<h2>Status check before launch</h2>
+<p>
+The system clock synchronization status allows you to determine if the NTP service is running. Since you haven't started NTP yet, the timesync-status command will hint at this:</p>
+<pre><code class="bash">[root@testvm1 ~]# timedatectl timesync-status
+Failed to query server: Could not activate remote peer.</code></pre>
+<p>
+A direct status request provides important information. For example, the timedatectl command with no argument or options executes the status subcommand by default:</p>
+<pre><code class="bash">[root@testvm1 ~]# timedatectl status
+           Local time: Fri 2020-05-15 08:43:10 EDT  
+           Universal time: Fri 2020-05-15 12:43:10 UTC  
+                 RTC time: Fri 2020-05-15 08:43:08      
+                Time zone: America/New_York (EDT, -0400)
+System clock synchronized: no                          
+              NTP service: inactive                    
+          RTC in local TZ: yes                    
+
+Warning: The system is configured to read the RTC time in the local time zone.
+         This mode cannot be fully supported. It will create various problems
+         with time zone changes and daylight saving time adjustments. The RTC
+         time is never updated, it relies on external facilities to maintain it.
+         If at all possible, use RTC in UTC by calling
+         'timedatectl set-local-rtc 0'.
+[root@testvm1 ~]#</code></pre>
+<p>
+This will give you the local time for your host, UTC time, and RTC time. In this case, the system time is set to the America / New_York (TZ) time zone, the RTC is set to the time in the local time zone, and the NTP service is not active. The RTC time has started to deviate slightly from the system time. This is normal for systems whose clocks have not been synchronized. The amount of offset on the host depends on the time that has passed since the system was last synchronized.</p>
+<p>We also received a warning about using local time for RTC - this applies to time zone changes and DST settings. If the computer is turned off when changes need to be made, the RTC will not change. But for servers or other hosts that run around the clock, this is not a problem at all. In addition, any service that provides NTP time synchronization will adjust the host's time during the initial startup phase, so the time will be correct again after startup is complete.</p>
+<h2>Setting the time zone</h2>
+<p class="gt-block">
+Usually, you specify the time zone during the installation procedure and you do not have the task of changing it later. However, there are times when you need to change the time zone. There are several tools that can help. Linux uses timezone files to determine the local timezone of a host. These files are in the directory <b>/usr/share/zoneinfo</b>. By default, for my time zone, the system prescribes this: <b>/etc/localtime -&gt; ../usr/share/zoneinfo/America/New_York</b>. But you don't need to know such subtleties to change the time zone.</p>
+<p>The main thing is to know the official time zone name for your location and the corresponding command. Let's say you want to change the time zone to Los Angeles:</p>
+<pre><code class="bash">
+[root@testvm2 ~]# timedatectl list-timezones | column
+&lt;SNIP&gt;
+America/La_Paz                  Europe/Budapest
+America/Lima                    Europe/Chisinau
+America/Los_Angeles             Europe/Copenhagen
+America/Maceio                  Europe/Dublin
+America/Managua                 Europe/Gibraltar
+America/Manaus                  Europe/Helsinki
+&lt;SNIP&gt;</code></pre>
+<p>
+Now you can set the timezone. I used the date command to check for changes, but you can also use timedatectl:</p>
+<pre><code class="bash">[root@testvm2 ~]# date
+Tue 19 May 2020 04:47:49 PM EDT
+[root@testvm2 ~]# timedatectl set-timezone America/Los_Angeles
+[root@testvm2 ~]# date
+Tue 19 May 2020 01:48:23 PM PDT
+[root@testvm2 ~]#</code></pre>
+<p>
+Now you can change your host's time zone back to local time.</p>
+<h2>systemd-timesyncd</h2>
+<p>
+The systemd timesync daemon provides an NTP implementation that is easy to manage in the systemd context. It is installed by default on Fedora and Ubuntu. However, it only starts by default on Ubuntu. I'm not sure about other distributions. You can check for yourself:</p>
+<pre><code class="bash">[root@testvm1 ~]# systemctl status systemd-timesyncd</code></pre>
+<p></p>
+<h2>Configuring systemd-timesyncd</h2>
+<p class="gt-block">
+The configuration file for systemd-timesyncd is <b>/etc/systemd/timesyncd.conf</b>. This is a simple file with fewer options enabled than the old NTP and chronyd services. Here is the contents of this file (without further modifications) on my Fedora VM:</p>
+<pre><code class="bash">#  This file is part of systemd.
+#
+#  systemd is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation; either version 2.1 of the License, or
+#  (at your option) any later version.
+#
+# Entries in this file show the compile time defaults.
+# You can change settings by editing this file.
+# Defaults can be restored by simply deleting this file.
+#
+# See timesyncd.conf(5) for details.
+
+[Time]
+#NTP=
+#FallbackNTP=0.fedora.pool.ntp.org 1.fedora.pool.ntp.org 2.fedora.pool.ntp.org 3.fedora.pool.ntp.org
+#RootDistanceMaxSec=5
+#PollIntervalMinSec=32
+#PollIntervalMaxSec=2048</code></pre>
+<p>
+The only section it contains, besides comments, is [Time]. All other lines are commented out. These are the default values ​​and should not be changed (unless you have a reason to). If you do not have an NTP time server defined in the NTP= line, Fedora defaults to a fallback Fedora time server. I usually add my time server:</p>
+<pre><code class="bash">NTP=myntpserver</code></pre>
+<p></p>
+<h2>Running timesync</h2>
+<p>
+You can start and make systemd-timesyncd active like this:</p>
+<pre><code class="bash">[root@testvm2 ~]# systemctl enable systemd-timesyncd.service
+Created symlink /etc/systemd/system/dbus-org.freedesktop.timesync1.service → /usr/lib/systemd/system/systemd-timesyncd.service.
+Created symlink /etc/systemd/system/sysinit.target.wants/systemd-timesyncd.service → /usr/lib/systemd/system/systemd-timesyncd.service.
+[root@testvm2 ~]# systemctl start systemd-timesyncd.service
+[root@testvm2 ~]#</code></pre>
+<p></p>
+<h2>Setting the hardware clock</h2>
+<p>
+Here is what the situation looks like after running timesyncd:</p>
+<pre><code class="bash">[root@testvm2 systemd]# timedatectl
+               Local time: Sat 2020-05-16 14:34:54 EDT  
+           Universal time: Sat 2020-05-16 18:34:54 UTC  
+                 RTC time: Sat 2020-05-16 14:34:53      
+                Time zone: America/New_York (EDT, -0400)
+System clock synchronized: yes                          
+              NTP service: active                      
+          RTC in local TZ: no    </code></pre>
+<p>
+Initially, the difference between RTC and local time (EDT) is less than a second, and the discrepancy increases by another couple of seconds over the next few days. Since there is no concept of time zones in RTC, the timedatectl command must perform a comparison to determine the correct time zone. If the RTC time does not exactly match the local time, then it does not match the local time zone either.</p>
+<p>Looking for more information, I checked the status of systemd-timesync and found this:</p>
+<pre><code class="bash">[root@testvm2 systemd]# systemctl status systemd-timesyncd.service
+● systemd-timesyncd.service - Network Time Synchronization
+     Loaded: loaded (/usr/lib/systemd/system/systemd-timesyncd.service; enabled; vendor preset: disabled)
+     Active: active (running) since Sat 2020-05-16 13:56:53 EDT; 18h ago
+       Docs: man:systemd-timesyncd.service(8)
+   Main PID: 822 (systemd-timesyn)
+     Status: "Initial synchronization to time server 163.237.218.19:123 (2.fedora.pool.ntp.org)."
+      Tasks: 2 (limit: 10365)
+     Memory: 2.8M
+        CPU: 476ms
+     CGroup: /system.slice/systemd-timesyncd.service
+             └─822 /usr/lib/systemd/systemd-timesyncd
+
+May 16 09:57:24 testvm2.both.org systemd[1]: Starting Network Time Synchronization...
+May 16 09:57:24 testvm2.both.org systemd-timesyncd[822]: System clock time unset or jumped backwards, restoring from recorded timestamp: Sat 2020-05-16 13:56:53 EDT
+May 16 13:56:53 testvm2.both.org systemd[1]: Started Network Time Synchronization.
+May 16 13:57:56 testvm2.both.org systemd-timesyncd[822]: Initial synchronization to time server 163.237.218.19:123 (2.fedora.pool.ntp.org).
+[root@testvm2 systemd]#</code></pre>
+<p>
+Notice the log message that says the system time has not been set or has been reset. The Timesync service sets the system time based on the timestamp. Timestamps are maintained by the timesync daemon and are created on every successful sync.</p>
+<p>The timedatectl command has no way to take the value of the hardware clock from the system clock. It can only set the time and date from the value entered on the command line. You can set the RTC to the same value as the system time using the hwclock command:</p>
+<pre><code class="bash">[root@testvm2 ~]# /sbin/hwclock --systohc --localtime
+[root@testvm2 ~]# timedatectl
+               Local time: Mon 2020-05-18 13:56:46 EDT  
+           Universal time: Mon 2020-05-18 17:56:46 UTC  
+                 RTC time: Mon 2020-05-18 13:56:46      
+                Time zone: America/New_York (EDT, -0400)
+System clock synchronized: yes                          
+              NTP service: active                      
+          RTC in local TZ: yes</code></pre>
+<p>
+The --localtime option tells the hardware clock to show local time, not UTC.</p>
+<h2>Why do you need RTC at all?</h2>
+<p>
+Any implementation of NTP will set the system clock at startup time. And why then RTC? This is not entirely true: this will only happen if you have a network connection to the time server. However, many systems don't always have access to a network connection, so a hardware clock is useful for Linux to use to set the system time. This is better than manually setting the time, even though it may deviate from real time.</p>
+<h2>Conclusion</h2>
+<p>
+This article has reviewed some tools for manipulating date, time, and time zones. The systemd-timesyncd tool provides an NTP client that can synchronize the time on the local host with an NTP server. However, systemd-timesyncd does not provide a server service, so if you need an NTP server on your network, you must use something else, such as Chrony, to act as a server.</p>
+<p>I prefer to have a single implementation for any service on my network, so I use Chrony. If you don't need a local NTP server, or if you don't mind using Chrony as the server and systemd-timesyncd as the SNTP client. After all, there is no need to use the additional features of Chrony as a client if you are satisfied with the functionality of systemd-timesyncd. </p>
+<p>Another note: you are not required to use the systemd tools to implement NTP. You can use an older version of ntpd, Chrony, or another NTP implementation. After all, systemd consists of a large number of services; many of them are optional, so you can turn them off and use something else instead. This is not a huge monolithic monster. You may not like systemd or parts of it, but you should make an informed decision.</p>
+<p>I like systemd's implementation of NTP, but I prefer Chrony because it suits my needs better. It's Linux, baby -)</p>
+<p></p>
+<h4>As advertising</h4>
+<p class="gt-block">
+VDSina offers <noindex><a rel="nofollow" href="https://vdsina.ru/pricing?partner=habr20">servers for any task</a></noindex>, a huge selection of operating systems for automatic installation, it is possible to install any OS from your own <noindex><a rel="nofollow" href="https://vdsina.ru/qa/q/kak-ispolzovat-svoy-obraz-iso-v-vds?partner=habr20">ISO</a></noindex>, comfortable <noindex><a rel="nofollow" href="https://habr.com/ru/company/vdsina/blog/460107/">Control Panel</a></noindex> own development and daily payment. Recall that we have eternal servers that are definitely timeless <img draggable="false" role="img" class="emoji" alt="😉" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/1f609.svg"></p>
+<p class="gt-block"><noindex><a rel="nofollow" href="https://vdsina.ru/eternal-server?partner=habr20"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" decoding="async" alt="Linux Time Synchronization: NTP, Chrony and systemd-timesyncd" data-wpfc-original-src="/wp-content/uploads/2020/06/064f41da647dc19427913c704dec1583.jpg" style="display:block;margin: 0 auto;"></a></noindex><br>
+<br>Source: <a content="nofollow" href="https://habr.com/ru/company/vdsina/blog/505314/">habr.com</a> </p>
+</div><!-- .entry-content -->
+</article><!-- #post-84228 -->
+<nav class="navigation post-navigation" aria-label="Записи">
+<h2 class="screen-reader-text">Post navigation</h2>
+<div class="nav-links"><div class="nav-previous"><a href="https://prohoster.info/en/blog/administrirovanie/kak-s-fio-proverit-diski-na-dostatochnuyu-proizvoditelnost-dlya-etcd" rel="prev">How to check disks with fio for sufficient performance for etcd</a></div><div class="nav-next"><a href="https://prohoster.info/en/blog/novosti-interneta/vypusk-beta-versii-protox-v1-5-tox-klienta-dlya-mobilnyh-platform" rel="next">Release of beta version of Protox v1.5, Tox client for mobile platforms.</a></div></div>
+</nav>    <div id="comments" class="comments-area">
+<div id="anycomment-root"></div>
+</div>
+</main><!-- #main -->
+</div><!-- #primary -->
+</div>
+
+</div><!-- #content -->
+<footer id="colophon" class="site-footer">
+<div class="container">
+<div class="row between-sm">
+<div class="col-md-3 col-xs-12"><div id="nav_menu-9" class="widget widget_nav_menu"><h3 class="widget-title">Our Services</h3><div class="menu-menyu-v-futere-v-vidzhete-1-russkij-container"><ul id="menu-menyu-v-futere-v-vidzhete-1-russkij" class="menu"><li id="menu-item-168" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-168"><a href="https://prohoster.info/en/hosting/unlim-khosting">Unlimited website hosting</a></li>
+<li id="menu-item-172" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-172"><a href="https://prohoster.info/en/zhashchita-ot-ddos">DDoS protection</a></li>
+<li id="menu-item-169" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-169"><a href="https://prohoster.info/en/hosting/constructor">Site builder</a></li>
+<li id="menu-item-175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-175"><a href="https://prohoster.info/en/control-panel">Control Panel</a></li>
+<li id="menu-item-173" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-173"><a href="https://prohoster.info/en/domain">Domain registration</a></li>
+<li id="menu-item-108824" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-108824"><a href="https://prohoster.info/en/ssl-sertifikat">SSL certificates</a></li>
+<li id="menu-item-107487" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-107487"><a href="https://prohoster.info/en/vpn">VPN</a></li>
+<li id="menu-item-170" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-170"><a href="https://prohoster.info/en/vps/ssd-vps">VPS, VPS</a></li>
+<li id="menu-item-171" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-171"><a href="https://prohoster.info/en/vps/abuzoustojchivye-vps">Windows VPS</a></li>
+</ul></div></div></div>
+<div class="col-md-3 col-sm-6 col-xs-12"><div id="nav_menu-10" class="widget widget_nav_menu"><h3 class="widget-title">Information</h3><div class="menu-menyu-v-futere-v-vidzhete-2-russkij-container"><ul id="menu-menyu-v-futere-v-vidzhete-2-russkij-1" class="menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-186"><a href="https://prohoster.info/en/kompaniya/partnerstvo">Sponsors</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-187"><a href="https://prohoster.info/en/bonus-partner">Bonuses from partners</a></li>
+</ul></div></div><div id="custom_html-20" class="widget_text widget widget_custom_html"><div class="textwidget custom-html-widget"><br>
+<br>
+<a href="https://ru.hostings.info/prohoster.html" target="_blank" rel="noopener">
+<img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" data-wpfc-original-src="https://ru.hostings.info/informers/cache/730-11-blue.png" alt="Customer Reviews at Hostings.info" title="Customer Reviews - opens in a new window" width="100" height="136" border="0">
+</a>
+<a href="https://hostadvice.com/hosting-company/prohoster-reviews/" rel="nofollow noopener" target="_blank"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 105px; float: right; visibility: visible;" data-wpfc-original-src="https://hostadvice.com/awards/2022-top25-dedicated-hosting.png" alt="ProHoster Reviews" data-xblocker="passed"></a>
+</div></div></div>
+<div class="col-md-3 col-sm-6 col-xs-12"><div id="nav_menu-11" class="widget widget_nav_menu"><h3 class="widget-title">Support</h3><div class="menu-menyu-v-futere-v-vidzhete-3-russkij-container"><ul id="menu-menyu-v-futere-v-vidzhete-3-russkij" class="menu"><li id="menu-item-188" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-188"><a href="https://billing.prohoster.info/?startpage=clienttickets&amp;_ga=2.56895791.402865426.1582093691-1238934708.1582093691"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" width="22" height="22" data-wpfc-original-src="https://prohoster.info/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/10/f1.png.webp" class="_mi _before _image" alt="blank" aria-hidden="true" decoding="async"><span>billing panel</span></a></li>
+<li id="menu-item-189" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-189"><a href="mailto:support@prohoster.info"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" width="22" height="22" data-wpfc-original-src="https://prohoster.info/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/10/f2.png.webp" class="_mi _before _image" alt="blank" aria-hidden="true" decoding="async"><span>support@prohoster.info</span></a></li>
+<li id="menu-item-108822" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-108822"><a href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" width="22" height="22" data-wpfc-original-src="https://prohoster.info/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2023/06/f3.png.webp" class="_mi _before _image" alt="blank" aria-hidden="true" decoding="async"><span>Netherlands, Meppel<br>Tulpenstraat 6</span></a></li>
+</ul></div></div><div id="custom_html-19" class="widget_text widget widget_custom_html"><div class="textwidget custom-html-widget"><a href="https://hostadvice.com/hosting-company/prohoster-reviews/" rel="nofollow noopener" target="_blank"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 105px; margin-left: 2%; visibility: visible;" data-wpfc-original-src="https://hostadvice.com/awards/great-uptime.png" alt="ProHoster Reviews" data-xblocker="passed"></a><a href="https://hostadvice.com/hosting-company/prohoster-reviews/" target="_blank" rel="nofollow noopener"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 105px; margin-left: 13%; visibility: visible;" data-wpfc-original-src="https://hostadvice.com/awards/2021-top-10-shared-hosting.png" alt="ProHoster Reviews" data-xblocker="passed"></a><a href="https://hostadvice.com/hosting-company/prohoster-reviews/" target="_blank" rel="noopener" style=""><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 113px; max-width: 62%; visibility: visible;" data-wpfc-original-src="https://hostadvice.com/wp-content/uploads/awards/2023-silver-top-25-best-windows-hosting.png" alt="ProHoster Reviews" data-xblocker="passed"></a>
+<a href="https://sourceforge.net/software/product/ProHoster/?pk_campaign=badge&amp;pk_source=vendor" target="_blank" rel="noopener"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" alt="ProHoster Reviews" data-wpfc-original-src="https://b.sf-syn.com/badge_img/3473357/top-performer-winter-white?achievement=top-performer-seasonal-2023-winter&amp;variant_id=sf&amp;r=https://prohoster.info/" onerror="SF.syndicationError(this)" style="min-width: 60px;max-width: 113px;margin-left: 8%;"></a></div></div></div>
+<div class="col-md-3 col-xs-12"><div id="custom_html-4" class="widget_text widget widget_custom_html"><h3 class="widget-title">We accept</h3><div class="textwidget custom-html-widget"><table><tbody><tr><td><a href="https://sci.interkassa.com/?ik_co_id=543d0639bf4efc2f41ec17a9&amp;ik_pm_no=ID_4233&amp;ik_am=50&amp;ik_desc=EventDescription#/paysystem/bitcoin" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" class="alignnone" style="width: 55px; height: 35px;" title="We accept Bitcoin" data-wpfc-original-src="/wp-content/uploads/2017/05/ditcoin1.jpg" alt="ditcoin1"></a></td><td><a href="https://www.bitcoincash.org/ru/" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept Bitcoin-Cash" data-wpfc-original-src="/wp-content/uploads/2017/05/Bitcoin-Cash.jpg" alt="Bitcoin-Cash"></a></td><td><a href="https://www.ethereum.org/" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept Ethereum" data-wpfc-original-src="/wp-content/uploads/2017/05/Ethereum.jpg" alt="Ethereum"></a></td><td><a href="https://pay.google.com/" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept GPay" data-wpfc-original-src="/wp-content/uploads/2017/05/GPay.png" alt="GPay"></a></td></tr><tr><td><a href="https://litecoin.org/" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" class="alignnone" style="width: 55px; height: 35px;" title="We accept Litecoin" data-wpfc-original-src="/wp-content/uploads/2017/05/Litecoin.jpg" alt="Litecoin"></a></td><td><a href="https://ripple.com/" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept Ripple" data-wpfc-original-src="/wp-content/uploads/2017/05/Ripple.jpg" alt="Ripple"></a></td><td><a href="https://tether.to/" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept USD-Tether" data-wpfc-original-src="/wp-content/uploads/2017/05/USD-Tether.jpg" alt="USD Tether"></a></td><td><a href="https://z.cash/" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept Zcash" data-wpfc-original-src="/wp-content/uploads/2017/05/Zcash.jpg" alt="Zcash"></a></td></tr><tr><td><a href="https://www.visa.com/" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept Visa" data-wpfc-original-src="/wp-content/uploads/2017/05/visa12.jpg" alt="visa1"></a></td><td><a href="https://www.mastercard.com/index.html" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept MasterCard" data-wpfc-original-src="/wp-content/uploads/2017/05/master22.jpg" alt="master2"></a></td><td><a href="https://payeer.com/" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept Payeer" data-wpfc-original-src="/wp-content/uploads/2017/05/Payeer-Logo22.jpg" alt="Payeer Logo2"></a></td><td><a href="https://prohoster.info/en/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" class="alignnone" style="width: 55px; height: 35px;" title="We accept crypto" data-wpfc-original-src="/wp-content/uploads/2017/05/cryptocom.jpg" alt="We accept crypto"></a></td></tr><tr><td><a href="https:" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept Apple Pay" data-wpfc-original-src="/wp-content/uploads/2017/05/Apple-Pay.png" alt="Apple Pay"></a></td><td><a href="https://www.paypal.com/" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept PayPal" data-wpfc-original-src="/wp-content/uploads/2017/05/Pay12.png" alt="Pay1"></a></td><td><a href="https://perfectmoney.is/" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept PerfectMoney" data-wpfc-original-src="/wp-content/uploads/2017/05/PerfectMoney.png" alt="privat1"></a></td><td><a href="https://advcash.com/" rel="nofollow"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" style="width: 55px; height: 35px;" title="We accept Advcash" data-wpfc-original-src="/wp-content/uploads/2020/03/advcash.jpg" alt="advcash"></a></td></tr></tbody></table></div></div><div id="custom_html-25" class="widget_text widget widget_custom_html"><h3 class="widget-title">Join us in social media</h3><div class="textwidget custom-html-widget"><div class="soc"><a href="https://www.youtube.com/channel/UCOa5wxO-1gTT6y4NggRMeDQ" target="_blank" rel="nofollow noopener"><span data-wpfc-original-src="/wp-content/uploads/social/icon-youtube-36.png" class="icons icon-youtube" style="        background-repeat: no-repeat;    background-size: 28px;    background-position: center;"><span></span></span></a><br>
+<a href="https://www.facebook.com/prohoster/" target="_blank" rel="nofollow noopener"><span class="icons icon-facebook"><span></span></span></a></div></div></div><div id="block-2" class="widget widget_block widget_text">
+<p></p>
+</div></div>
+</div>
+</div>
+<div class="site-info">
+<div class="container">
+<div class="row">
+<div class="col-md-12 text-center-xs"> 
+<div class="textwidget custom-html-widget">
+&nbsp;<a title="HostDB.ru - portal about hosting and hosting providers." href="https://hostdb.ru/" target="_blank" rel="noopener"><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" data-wpfc-original-src="https://hostdb.ru/get_logo.php?id=3263&amp;type=1" alt="HostDB.ru - portal about hosting and hosting providers." width="88" height="31" border="0"> </a><img onload="Wpfcll.r(this,true);" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/blank.gif" class="" data-wpfc-original-src="/wp-content/uploads/ripe-ncc-m.png" alt="ripe-ncc-m"></div>					© 2014 - 2024<span class="sep"> | </span>All rights reserved.
+</div>
+</div>
+</div>
+</div><!-- .site-info -->
+</footer><!-- #colophon -->
+</div><!-- #page -->
+<!-- Shortcodes Ultimate custom CSS - start -->
+<style type="text/css">
+.su-tabs-nav span.cpanel{
+background-image: url(/wp-content/uploads/hosting/cpanel.png);
+background-repeat: no-repeat;
+background-size: 14%;
+background-position-y: center;
+background-position-x: 6%;
+padding-left: 4%;
+}
+.su-tabs-nav span.isp{
+background-image: url(/wp-content/uploads/hosting/ispmanager.png);
+background-repeat: no-repeat;
+background-size: 14%;
+background-position-y: center;
+background-position-x: 6%;
+padding-left: 4%;
+}
+.su-tabs-nav span.su-tabs-current {
+color: #fff!important;
+background-color: #0e8ebe !important;
+}
+.su-tabs-nav span {
+display: inline-block!important;
+color: #333!important;
+text-decoration: none!important;
+padding: 0.7rem 30px!important;
+position: relative!important;
+background-color: #e6f3f8 !important;
+width: 240px!important;
+border-radius: 20px!important;
+margin: 15px 5px!important;
+float: left!important;
+text-align: center!important;
+line-height: 20px!important;
+box-shadow: 0 2px 10px -2px rgb(0 0 0 / 75%) !important;
+padding-left: 5px!important;
+padding-right: 5px!important;
+}
+.su-tabs {
+background:none;
+}
+.su-tabs-pane {
+/* display: -webkit-inline-box; */
+/*   padding: 55px 0px 0px 0px ;*/
+}
+.su-tabs-nav span.su-tabs-current {
+background:;
+}
+.su-tabs-nav{
+display: flex;
+flex-direction: row;
+align-content: center;
+justify-content: center;
+}
+@media (max-width: 768px) {
+.su-tabs-nav {
+display: flex;
+flex-direction: column;
+align-content: center;
+justify-content: center;
+flex-wrap: nowrap;
+align-items: center;}
+}
+.youtube_slow {
+overflow: hidden;
+width: 100%;
+height: 0px;
+animation: showDiv 13s forwards;
+}
+@keyframes showDiv {
+0%, 99% {
+height: 0px;
+}
+100% {
+height: 120px;
+}
+}
+</style>
+<!-- Shortcodes Ultimate custom CSS - end -->
+<!-- <script>
+function findVideos() {
+let videos = document.querySelectorAll('.video');
+for (let i = 0; i < videos.length; i++) {
+setupVideo(videos[i]);
+}
+}
+function setupVideo(video) {
+let link = video.querySelector('.video__link');
+let media = video.querySelector('.video__media');
+let button = video.querySelector('.video__button');
+let id = parseMediaURL(media);
+video.addEventListener('click', () => {
+let iframe = createIframe(id);
+link.remove();
+button.remove();
+video.appendChild(iframe);
+});
+link.removeAttribute('href');
+video.classList.add('video--enabled');
+}
+function parseMediaURL(media) {
+let regexp = /https:\/\/i\.ytimg\.com\/vi\/([a-zA-Z0-9_-]+)\/maxresdefault\.jpg/i;
+let url = media.getAttribute('src');
+let match = url.match(regexp);
+}
+function createIframe(id) {
+let iframe = document.createElement('iframe');
+iframe.setAttribute('allowfullscreen', '');
+iframe.setAttribute('allow', 'autoplay');
+iframe.setAttribute('src', generateURL(id));
+iframe.classList.add('video__media');
+return iframe;
+}
+function generateURL(id) {
+let query = '?rel=0&showinfo=0&autoplay=1';
+return 'https://www.youtube.com/embed/'+ id;
+}
+findVideos();
+</script>-->
+<noscript id="wpfc-google-fonts"><link rel='stylesheet' id='anycomment-google-font-css' href='https://fonts.googleapis.com/css?family=Noto+Sans%3A400%2C700&#038;subset=cyrillic&#038;display=swap&#038;ver=6.6.2' type='text/css' media='all' />
+</noscript>
+<script>document.addEventListener('DOMContentLoaded',function(){function wpfcgl(){var wgh=document.querySelector('noscript#wpfc-google-fonts').innerText, wgha=wgh.match(/<link[^\>]+>/gi);for(i=0;i<wgha.length;i++){var wrpr=document.createElement('div');wrpr.innerHTML=wgha[i];document.body.appendChild(wrpr.firstChild);}}wpfcgl();});</script>
+<script type="text/javascript">
+var ajaxurl = 'https://prohoster.info/en/wp-admin/admin-ajax.php';
+</script>
+<script>
+var counter_url = "https://billing.prohoster.info/mancgi/counter?rnd="+Math.random()+"&project=1&r="+escape(document.referrer)+"&p="+escape(window.location.href);
+document.write("<img src='" + counter_url + "' width=0 height=0 style='display: none;'>");
+</script><img src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/counter" width="0" height="0" style="display: none;">
+<script type="text/javascript" id="anycomment-js-bundle-js-extra">
+/* <![CDATA[ */
+var anyCommentApiSettings = {"postId":"84228","nonce":"bde1befe47","locale":"ru_RU","restUrl":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/","commentCount":"0","errors":null,"user":null,"urls":{"logout":"https:\/\/prohoster.info/en\/admin_ph?action=logout&amp;_wpnonce=4768865b9e&redirect_to=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd#comments","postUrl":"https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd"},"post":{"id":84228,"permalink":"https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","comments_open":true},"rating":{"value":0,"count":0,"hasRated":false},"options":{"limit":20,"isCopyright":false,"socials":{"vkontakte":{"slug":"vkontakte","url":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/auth\/vkontakte?redirect=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","label":"VK","color":"#4a76a8","visible":true},"twitter":{"slug":"twitter","url":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/auth\/twitter?redirect=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","label":"Twitter","color":"#1da1f2","visible":true},"facebook":{"slug":"facebook","url":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/auth\/facebook?redirect=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","label":"Facebook","color":"#3b5998","visible":true},"google":{"slug":"google","url":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/auth\/google?redirect=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","label":"Google","color":"#db4437","visible":true},"github":{"slug":"github","url":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/auth\/github?redirect=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","label":"Github","color":"#24292e","visible":true},"odnoklassniki":{"slug":"odnoklassniki","url":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/auth\/odnoklassniki?redirect=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","label":"\u041e\u0434\u043d\u043e\u043a\u043b\u0430\u0441\u0441\u043d\u0438\u043a\u0438","color":"#ee8208","visible":true},"twitch":{"slug":"twitch","url":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/auth\/twitch?redirect=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","label":"Twitch","color":"#6441a4","visible":false},"dribbble":{"slug":"dribbble","url":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/auth\/dribbble?redirect=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","label":"Dribbble","color":"#ea4c89","visible":false},"yandex":{"slug":"yandex","url":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/auth\/yandex?redirect=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","label":"\u042f\u043d\u0434\u0435\u043a\u0441","color":"#f90000","visible":false},"mailru":{"slug":"mailru","url":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/auth\/mailru?redirect=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","label":"Mail.Ru","color":"#005ff9","visible":true},"steam":{"slug":"steam","url":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/auth\/steam?redirect=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","label":"Steam","color":"#171A21","visible":false},"yahoo":{"slug":"yahoo","url":"https:\/\/prohoster.info/en\/wp-json\/anycomment\/v1\/auth\/yahoo?redirect=https:\/\/prohoster.info/en\/blog\/administrirovanie\/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd","label":"Yahoo","color":"#430297","visible":false},"wordpress":{"slug":"wordpress","url":"https:\/\/prohoster.info/en\/admin_ph?redirect_to=https%3A%2F%2Fprohoster.info%2Fblog%2Fadministrirovanie%2Fsinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd%23comments","label":"WordPress","visible":true}},"sort_order":"desc","guestInputs":["name","email","website"],"isShowUpdatedInfo":true,"isNotifySubscribers":false,"isShowProfileUrl":true,"isShowImageAttachments":true,"isShowVideoAttachments":true,"isShowTwitterEmbeds":true,"isModerateFirst":false,"userAgreementLink":null,"notifyOnNewComment":false,"intervalCommentsCheck":"10","isLoadOnScroll":true,"isFormTypeAll":false,"isFormTypeGuests":false,"isFormTypeSocials":true,"isFormTypeWordpress":false,"isFileUploadAllowed":false,"isGuestCanUpload":null,"fileMimeTypes":"image\/*, .pdf","fileLimit":"5","fileMaxSize":"1.5","fileUploadLimit":"900","isRatingOn":true,"isReadMoreOn":true,"commentRating":"likes","dateFormat":"relative","isEditorOn":true,"editorToolbarOptions":["bold","italic","underline","blockquote","ordered","bullet","link","clean"],"reCaptchaOn":false,"reCaptchaUserAll":false,"reCaptchaUserGuest":true,"reCaptchaUserAuth":false,"reCaptchaSiteKey":null,"reCaptchaTheme":"light","reCaptchaPosition":"bottomright"},"i18":{"error_generic":"\u0423\u043f\u0441, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a. \u041f\u043e\u043f\u0440\u043e\u0431\u0443\u0439\u0442\u0435 \u043f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0443.","loading":"\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0430...","load_more":"\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u0435\u0449\u0435","waiting_moderation":"\u041e\u0436\u0438\u0434\u0430\u0435\u0442 \u043c\u043e\u0434\u0435\u0440\u0430\u0446\u0438\u044e","edited":"\u0418\u0437\u043c\u0435\u043d\u0435\u043d","button_send":"\u041e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c","button_save":"\u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c","button_reply":"\u041e\u0442\u0432\u0435\u0442\u0438\u0442\u044c","sorting":"\u0421\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u043a\u0430","sort_by":"\u0421\u043d\u0430\u0447\u0430\u043b\u0430","sort_oldest":"\u0441\u0442\u0430\u0440\u044b\u0435","sort_newest":"\u043d\u043e\u0432\u044b\u0435","reply_to":"\u043e\u0442\u0432\u0435\u0442 \u0434\u043b\u044f","editing":"\u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0435","add_comment":"\u0412\u0430\u0448 \u043a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439...","no_comments":"\u041f\u043e\u043a\u0430 \u0435\u0449\u0435 \u043d\u0435 \u0431\u044b\u043b\u043e \u043a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0435\u0432","footer_copyright":"\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c AnyComment \u043d\u0430 \u0441\u0432\u043e\u0439 \u0441\u0430\u0439\u0442","reply":"\u041e\u0442\u0432\u0435\u0442\u0438\u0442\u044c","edit":"\u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c","delete":"\u0423\u0434\u0430\u043b\u0438\u0442\u044c","comments_closed":"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438 \u0437\u0430\u043a\u0440\u044b\u0442\u044b.","subscribed":"\u041f\u0440\u043e\u0432\u0435\u0440\u044c\u0442\u0435 \u0432\u0430\u0448\u0443 \u043f\u043e\u0447\u0442\u0443, \u0447\u0442\u043e\u0431\u044b \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c \u043f\u043e\u0434\u043f\u0438\u0441\u043a\u0443","subscribe":"\u041f\u043e\u0434\u043f\u0438\u0441\u0430\u0442\u044c\u0441\u044f","subscribe_pre_paragraph":"\u0412\u044b \u043c\u043e\u0436\u0435\u0442\u0435 \u043f\u043e\u0434\u043f\u0438\u0441\u0430\u0442\u044c\u0441\u044f \u043d\u0430 \u043d\u043e\u0432\u044b\u0435 \u043a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438 \u043a \u044d\u0442\u043e\u043c\u0443 \u043f\u043e\u0441\u0442\u0443, \u0443\u043a\u0430\u0437\u0430\u0432 \u0441\u0432\u043e\u044e \u043f\u043e\u0447\u0442\u0443 \u0432 \u043f\u043e\u043b\u0435 \u043d\u0438\u0436\u0435:","cancel":"\u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c","quick_login":"\u0411\u044b\u0441\u0442\u0440\u044b\u0439 \u0432\u0445\u043e\u0434","guest":"\u0413\u043e\u0441\u0442\u044c","login":"\u0412\u043e\u0439\u0442\u0438","logout":"\u0412\u044b\u0439\u0442\u0438","comment_waiting_moderation":"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439 \u0431\u0443\u0434\u0435\u0442 \u043f\u043e\u043a\u0430\u0437\u0430\u043d \u043f\u043e\u0441\u043b\u0435 \u0440\u0430\u0441\u0441\u043c\u043e\u0442\u0440\u0435\u043d\u0438\u044f \u043c\u043e\u0434\u0435\u0440\u0430\u0442\u043e\u0440\u043e\u043c.","new_comment_was_added":"\u0411\u044b\u043b \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d \u043d\u043e\u0432\u044b\u0439 \u043a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439","author":"\u0410\u0432\u0442\u043e\u0440","name":"\u0418\u043c\u044f","email":"\u041f\u043e\u0447\u0442\u0430","website":"\u0412\u0435\u0431-\u0441\u0430\u0439\u0442","already_rated":"\u0412\u044b \u0443\u0436\u0435 \u0433\u043e\u043b\u043e\u0441\u043e\u0432\u0430\u043b\u0438","accept_user_agreement":"\u042f \u0434\u0430\u044e \u0441\u043e\u0433\u043b\u0430\u0441\u0438\u0435 \u043d\u0430 \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0443 <a href=\"\" target=\"_blank\" >\u043f\u0435\u0440\u0441\u043e\u043d\u0430\u043b\u044c\u043d\u044b\u0445 \u0434\u0430\u043d\u043d\u044b\u0445<\/a>","upload_file":"\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u0444\u0430\u0439\u043b","file_upload_in_progress":"\u0418\u0434\u0435\u0442 \u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0430...","file_uploaded":"\u0417\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043e!","file_too_big":"\u0424\u0430\u0439\u043b %s \u0441\u043b\u0438\u0448\u043a\u043e\u043c \u0431\u043e\u043b\u044c\u0448\u043e\u0439","file_limit":"\u0412\u044b \u043c\u043e\u0436\u0435\u0442\u0435 \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u043c\u0430\u043a\u0441\u0438\u043c\u0443\u043c 5 \u0444\u0430\u0439\u043b(-\u043e\u0432)","file_not_selected_or_extension":"\u041d\u0435 \u0432\u044b\u0431\u0440\u0430\u043d\u044b \u0444\u0430\u0439\u043b\u044b \u0438\u043b\u0438 \u043d\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u044c\u043d\u043e\u0435 \u0440\u0430\u0441\u0448\u0438\u0440\u0435\u043d\u0438\u0435","read_more":"\u0427\u0438\u0442\u0430\u0442\u044c \u043f\u043e\u043b\u043d\u043e\u0441\u0442\u044c\u044e","show_less":"\u0421\u0432\u0435\u0440\u043d\u0443\u0442\u044c","hide_this_message":"\u0421\u043a\u0440\u044b\u0442\u044c \u044d\u0442\u043e \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435","login_with":"\u0412\u043e\u0439\u0442\u0438 \u0441","or_as_guest":"\u0438\u043b\u0438 \u043a\u0430\u043a \u0433\u043e\u0441\u0442\u044c:","comments_count":"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0435\u0432:","lighbox_close":"\u0417\u0430\u043a\u0440\u044b\u0442\u044c (Esc)","lighbox_left_arrow":"\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0430\u044f (\u043b\u0435\u0432\u0430\u044f \u0441\u0442\u0440\u0435\u043b\u043a\u0430)","lighbox_right_arrow":"\u0421\u043b\u0435\u0434\u0443\u044e\u0449\u0430\u044f (\u043f\u0440\u0430\u0432\u0430\u044f \u0441\u0442\u0440\u0435\u043b\u043a\u0430)","lighbox_image_count_separator":" \u0438\u0437 "}};
+/* ]]> */
+</script>
+<script type="text/javascript">
+/* <![CDATA[ */
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/15.0.3\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/15.0.3\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/prohoster.info/en\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.6.2"}};
+/*! This file is auto-generated */
+!function(i,n){var o,s,e;function c(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function p(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data),r=(e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0),new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data));return t.every(function(e,t){return e===r[t]})}function u(e,t,n){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\uddfa\ud83c\uddf3","\ud83c\uddfa\u200b\ud83c\uddf3")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!n(e,"\ud83d\udc26\u200d\u2b1b","\ud83d\udc26\u200b\u2b1b")}return!1}function f(e,t,n){var r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):i.createElement("canvas"),a=r.getContext("2d",{willReadFrequently:!0}),o=(a.textBaseline="top",a.font="600 32px Arial",{});return e.forEach(function(e){o[e]=t(a,e,n)}),o}function t(e){var t=i.createElement("script");t.src=e,t.defer=!0,i.head.appendChild(t)}"undefined"!=typeof Promise&&(o="wpEmojiSettingsSupports",s=["flag","emoji"],n.supports={everything:!0,everythingExceptFlag:!0},e=new Promise(function(e){i.addEventListener("DOMContentLoaded",e,{once:!0})}),new Promise(function(t){var n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"}),a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=function(e){c(n=e.data),a.terminate(),t(n)})}catch(e){}c(n=f(s,u,p))}t(n)}).then(function(e){for(var t in e)n.supports[t]=e[t],n.supports.everything=n.supports.everything&&n.supports[t],"flag"!==t&&(n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&n.supports[t]);n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&!n.supports.flag,n.DOMReady=!1,n.readyCallback=function(){n.DOMReady=!0}}).then(function(){return e}).then(function(){var e;n.supports.everything||(n.readyCallback(),(e=n.source||{}).concatemoji?t(e.concatemoji):e.wpemoji&&e.twemoji&&(t(e.twemoji),t(e.wpemoji)))}))}((window,document),window._wpemojiSettings);
+/* ]]> */
+</script>
+<script type="text/javascript">
+AnyComment = window.AnyComment || [];
+AnyComment.WP = AnyComment.WP || [];
+AnyComment.WP.push({
+root: 'anycomment-root',        
+});
+</script>
+<script type="text/javascript" async="async" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/3u7qw.js.download" id="anycomment-js-bundle-js"></script>
+<script type="text/javascript" id="gt_widget_script_23402108-js-before">
+/* <![CDATA[ */
+window.gtranslateSettings = /* document.write */ window.gtranslateSettings || {};window.gtranslateSettings['23402108'] = {"default_language":"ru","languages":["af","sq","am","ar","hy","az","eu","be","bn","bs","bg","ca","ceb","ny","zh-CN","zh-TW","co","hr","cs","da","nl","en","eo","et","tl","fi","fr","fy","gl","ka","de","el","gu","ht","ha","haw","iw","hi","hmn","hu","is","ig","id","ga","it","ja","jw","kn","kk","km","ko","ku","ky","lo","la","lv","lt","lb","mk","mg","ms","ml","mt","mi","mr","mn","my","ne","no","ps","fa","pl","pt","pa","ro","ru","sm","gd","sr","st","sn","sd","si","sk","sl","so","es","su","sw","sv","tg","ta","te","th","tr","uk","ur","uz","vi","cy","xh","yi","yo","zu"],"url_structure":"sub_directory","detect_browser_language":1,"flag_style":"2d","flag_size":24,"wrapper_selector":"#gt-wrapper-23402108","alt_flags":[],"custom_css":".gtranslate_wrapper .gt_option {position: absolute;}","horizontal_position":"inline","flags_location":"\/wp-content\/plugins\/gtranslate\/flags\/"};
+/* ]]> */
+</script>
+<script src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/popup.js.download" data-no-optimize="1" data-no-minify="1" data-gt-orig-url="/blog/administrirovanie/sinhronizacziya-vremeni-v-linux-ntp-chrony-i-systemd-timesyncd" data-gt-orig-domain="prohoster.info" data-gt-widget-id="23402108" defer=""></script>
+<script type="text/javascript" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/3u7qw(1).js.download" id="jquery-core-js"></script>
+<script type="text/javascript" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/3u7qw(2).js.download" id="jquery-migrate-js"></script>
+<script type="text/javascript" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/3u7qw(3).js.download" id="universal55x5-custom-js"></script>
+<script type="text/javascript" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/3u7qw(4).js.download" id="universal55x5-navigation-js"></script>
+<script type="text/javascript" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/3u7qw(5).js.download" id="universal55x5-skip-link-focus-fix-js"></script>
+<script type="text/javascript" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/3u7qw(6).js.download" id="comment-reply-js" async="async" data-wp-strategy="async"></script>
+<script type="text/javascript">
+(function() {
+var expirationDate = new Date();
+expirationDate.setTime( expirationDate.getTime() + 31536000 * 1000 );
+document.cookie = "pll_language=ru; expires=" + expirationDate.toUTCString() + "; path=/; secure; SameSite=Lax";
+}());
+</script>
+<script>
+jQuery(".fold-table tr.view").on("click", function(){
+jQuery(this).toggleClass("open").next(".fold").toggleClass("open");
+});
+</script>
+<script defer="" type="text/javascript" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/3u7qw(7).js.download"></script>
+<script defer="" type="text/javascript" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/3u7qw(8).js.download"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){
+$(document).ready(function(){
+// Устанавливаем ширину и высоту контейнера в соответствии с размерами изображения
+//$('#wrapper').css({'width':$('#wrapper img').width(),
+//				  'height':$('#wrapper img').height()
+//})
+//Направление символа подсказки
+var tooltipDirection;
+for (i=0; i<$(".pin").length; i++)
+{				
+// Устанавливаем направление символа подсказки - вверх или вниз
+if ($(".pin").eq(i).hasClass('pin-down')) {
+tooltipDirection = 'tooltip-down';
+} else {
+tooltipDirection = 'tooltip-up';
+}
+// Добавляем подсказку
+$("#wrapper").append("<div style='left:"+$(".pin").eq(i).data('xpos')+"%;top:"+$(".pin").eq(i).data('ypos')+"%' class='" + tooltipDirection +"'>\
+<div class='tooltip'>" + $(".pin").eq(i).html() + "</div>\
+</div>"); 
+}    
+// Выводим/скрываем подсказку
+$('.tooltip-up, .tooltip-down').mouseenter(function(){
+$(this).children('.tooltip').fadeIn(100);
+}).mouseleave(function(){
+$(this).children('.tooltip').fadeOut(100);
+})
+});});</script>
+
+<script data-cfasync="false" src="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/queue.js.download"></script><link rel="stylesheet" id="anycomment-google-font-css" href="./🥇Linux time synchronization_ NTP, Chrony and systemd-timesyncd _ ProHoster_files/css" type="text/css" media="all"></body></html>

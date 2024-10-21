@@ -1,0 +1,25 @@
+(function ($){
+$(window).resize(function (){
+if(document.documentElement.clientWidth > 991){
+$(window).scroll(function (){
+var height=$(window).scrollTop();
+if(height > 150){
+$('#masthead').addClass('header-fixed');
+}else{
+$('#masthead').removeClass('header-fixed');
+}});
+}}).resize();
+$('.tbl-accordion-nested').each(function(){
+var thead=$(this).find('thead');
+var tbody=$(this).find('tbody');
+tbody.hide();
+thead.click(function(){
+tbody. slideToggle();
+})
+});
+$('#div1').hover(function(){
+$('#div2').addClass('hovered');
+}, function(){
+$('#div2').removeClass('hovered');
+});
+})(jQuery);

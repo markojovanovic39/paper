@@ -1,0 +1,11 @@
+(function ($){
+$('.gamburger-btn').on('click', function(event){
+event.preventDefault();
+$(this).toggleClass('gamburger-btn_active');
+$('ul#primary-menu').toggleClass('active_primary');
+});
+$("#mobile_sidebar").click(function (){
+$(this).toggleClass("open_mobile_sidebar");
+$('aside#secondary').toggleClass("open_secondary");
+});
+})(jQuery);
